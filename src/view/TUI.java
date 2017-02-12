@@ -102,6 +102,7 @@ public class TUI implements UI {
 		do {
 			input = getInput("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.");
 			hashMap.put("ID", input);
+			//TODO mangler validering mod "ikke integers" før parsing
 			userToEdit = Integer.parseInt(input);
 			if(!controller.exists(userToEdit)) {
 				System.out.println("User doesn't exist!");
@@ -155,6 +156,7 @@ public class TUI implements UI {
 		// gets user to delete
 		do {
 			input = getInput("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.");
+			//TODO mangler validering mod "ikke integers" før parsing
 			userToDelete = Integer.parseInt(input);
 			if(!controller.exists(userToDelete)) {
 				System.out.println("User doesn't exist!");
@@ -180,6 +182,7 @@ public class TUI implements UI {
 		do {
 			input = getInput(info);
 			dataMap.put("ID", input);
+			//TODO mangler validering mod "ikke integers" før parsing
 		} while ((Integer.parseInt(input) < 11 || Integer.parseInt(input) > 99) && !input.equals("cancel"));
 		return input;
 	}

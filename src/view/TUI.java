@@ -8,10 +8,6 @@ public class TUI implements UI {
 
 	Ctrl controller;
 
-	public public TUI(Ctrl controller) {
-		this.controller = controller;
-	}
-
 	@Override
 	public void run() {
 		mainMenu();
@@ -41,7 +37,7 @@ public class TUI implements UI {
 					editUser();
 					break;
 				case "delete":
-
+					delete();
 					break;
 				case "exit":
 					break program;
@@ -154,10 +150,10 @@ public class TUI implements UI {
 		do {
 			input = getInput("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.");
 			userToDelete = Integer.parseInt(input);
-			if(!controller.exists(userToEdit)) {
+			if(!controller.exists(userToDelete)) {
 				System.out.println("User doesn't exist!");
 			}
-		} while (!controller.exists(userToEdit) && !input.equals("cancel"));
+		} while (!controller.exists(userToDelete) && !input.equals("cancel"));
 
 		// confirmation
 		input = getInput("Are you sure you want to delete user with ID: " + userToDelete + "?\n"
@@ -214,6 +210,7 @@ public class TUI implements UI {
 	
 	private String changePassword(String info) {
 		//TODO password validering
+		return "";
 	}
 	
 	private String getRole(String info, HashMap<String, String> dataMap) {

@@ -2,11 +2,16 @@ package view;
 
 import java.util.HashMap;
 import java.util.Scanner;
-import dto.UserDTO;
 
 public class TUI implements UI {
 
 	Ctrl controller;
+	Scanner scanner;
+
+	public TUI() {
+		//TODO controller mangler
+		scanner = new Scanner(System.in);
+	}
 
 	@Override
 	public void run() {
@@ -17,9 +22,9 @@ public class TUI implements UI {
 		program:
 			while(true) {
 				// gets input
-				String choice = getInput("You are in the main menu, please choose what you want to do./n"
-						+ "The available commands are:/n"
-						+ "create - creates a new user, ID and password is auto generated./n"
+				String choice = getInput("You are in the main menu, please choose what you want to do.\n"
+						+ "The available commands are:\n"
+						+ "create - creates a new user, ID and password is auto generated.\n"
 						+ "list - prints a list of all the current users.\n"
 						+ "edit - lets you edit current users.\n"
 						+ "delete - deletes a user by ID.\n"
@@ -46,6 +51,7 @@ public class TUI implements UI {
 					break;
 				}
 			}
+	scanner.close();
 	}
 
 	private void createUser() {
@@ -73,7 +79,7 @@ public class TUI implements UI {
 
 		// gets role
 		if(!input.equals("cancel")) {
-			input = getRole("Choose a role from Admin, Pharmacist, Foreman or Operater, or type cancel to go to main menu.", hashMap);
+			input = getRole("Choose a role from Admin, Pharmacist, Foreman or Operator, or type cancel to go to main menu.", hashMap);
 		}
 
 		if(!input.equals("cancel")) {
@@ -106,9 +112,9 @@ public class TUI implements UI {
 			loop:
 				while(true) {
 					// gets input 
-					String choice = getInput("Please choose what you want to edit./n"
-							+ "The available commands are:/n"
-							+ "name - lets you change the user name./n"
+					String choice = getInput("Please choose what you want to edit.\n"
+							+ "The available commands are:\n"
+							+ "name - lets you change the user name.\n"
 							+ "ini - lets you change the initials.\n"
 							+ "password - lets you change the password.\n"
 							+ "role - lets you change the role\n"
@@ -165,9 +171,7 @@ public class TUI implements UI {
 
 	private String getInput(String info) {
 		System.out.println(info);
-		Scanner scanner = new Scanner(System.in);
 		String input = scanner.nextLine();
-		scanner.close();
 		return input;
 	}
 
@@ -176,49 +180,49 @@ public class TUI implements UI {
 		do {
 			input = getInput(info);
 			dataMap.put("ID", input);
-		} while (Integer.parseInt(input) > 10 && Integer.parseInt(input) < 100 && !input.equals("cancel"));
+		} while ((Integer.parseInt(input) < 11 || Integer.parseInt(input) > 99) && !input.equals("cancel"));
 		return input;
 	}
-	
+
 	private String getName(String info, HashMap<String, String> dataMap) {
 		String input;
 		do {
 			input = getInput(info);
 			dataMap.put("userName", input);
-		} while (input.length() < 2 && input.length() > 20 && !input.equals("cancel"));
+		} while ((input.length() < 2 || input.length() > 20) && !input.equals("cancel"));
 		return input;
 	}
-	
+
 	private String getIni(String info, HashMap<String, String> dataMap) {
 		String input;
 		do {
 			input = getInput(info);
 			dataMap.put("ini", input);
-		} while (input.length() < 2 && input.length() > 4 && !input.equals("cancel"));
+		} while ((input.length() < 2 || input.length() > 4) && !input.equals("cancel"));
 		return input;
 	}
-	
+
 	private String getCpr(String info, HashMap<String, String> dataMap) {
 		String input;
 		do {
 			input = getInput(info);
 			dataMap.put("cpr", input);
-		} while (input.length() == 10 && !input.equals("cancel"));
+		} while (input.length() != 10 && !input.equals("cancel"));
 		//TODO validering af cpr-nummer?
 		return input;
 	}
-	
+
 	private String changePassword(String info) {
 		//TODO password validering
 		return "";
 	}
-	
+
 	private String getRole(String info, HashMap<String, String> dataMap) {
 		String input;
 		do {
 			input = getInput(info);
 			dataMap.put("role", input);
-		} while (input.equals("Admin") && input.equals("Pharmacist") && input.equals("Foreman") && input.equals("Operator")
+		} while ((!input.equals("Admin") && !input.equals("Pharmacist") && !input.equals("Foreman") && !input.equals("Operator"))
 				&& !input.equals("cancel"));
 		//TODO flere roller?
 		return input;

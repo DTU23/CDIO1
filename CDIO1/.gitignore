@@ -1,2 +1,7 @@
 /bin/
 /users.data
+
+.idea
+.settings
+.classpath
+.project

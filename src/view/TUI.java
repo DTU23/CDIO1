@@ -1,6 +1,7 @@
 package view;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 import control.Ctrl;
 
@@ -56,7 +57,7 @@ public class TUI implements UI {
 	}
 
 	private void createUser() {
-		HashMap<String, String> hashMap = new HashMap<String, String>();
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
 		String password;
 
@@ -96,19 +97,18 @@ public class TUI implements UI {
 	}
 
 	private void editUser() {
-		HashMap<String, String> hashMap = new HashMap<String, String>();
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
-		int userToEdit;
 		// gets user to edit
 		do {
 			input = getInput("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.");
 			hashMap.put("ID", input);
-			//TODO mangler validering mod "ikke integers" før parsing
-			userToEdit = Integer.parseInt(input);
-			if(!controller.exists(userToEdit)) {
-				System.out.println("User doesn't exist!");
+			if(isInteger(input)) {
+				if (!controller.exists(hashMap)) {
+					System.out.println("User doesn't exist!");
+				}
 			}
-		} while (!controller.exists(userToEdit) && !input.equals("cancel"));
+		} while (!controller.exists(hashMap) && !input.equals("cancel"));
 
 		if(!input.equals("cancel")) {
 			loop:
@@ -152,23 +152,24 @@ public class TUI implements UI {
 	}
 
 	private void delete() {
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
-		int userToDelete;
 		// gets user to delete
 		do {
 			input = getInput("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.");
-			//TODO mangler validering mod "ikke integers" før parsing
-			userToDelete = Integer.parseInt(input);
-			if(!controller.exists(userToDelete)) {
-				System.out.println("User doesn't exist!");
+			hashMap.put("ID", input);
+			if(isInteger(input)) {
+				if (!controller.exists(hashMap)) {
+					System.out.println("User doesn't exist!");
+				}
 			}
-		} while (!controller.exists(userToDelete) && !input.equals("cancel"));
+		} while (!controller.exists(hashMap) && !input.equals("cancel"));
 
 		// confirmation
-		input = getInput("Are you sure you want to delete user with ID: " + userToDelete + "?\n"
+		input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
 				+ "Type confirm or cancel.");
 		if(input.equals("confirm")) {
-			controller.deleteUser(userToDelete);
+			controller.deleteUser(hashMap);
 		}
 	}
 
@@ -178,17 +179,30 @@ public class TUI implements UI {
 		return input;
 	}
 
-	private String getID(String info, HashMap<String, String> dataMap) {
+	private boolean isInteger(String input) {
+		try {
+			Integer.parseInt(input);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private String getID(String info, HashMap<String, Object> dataMap) {
 		String input;
+		int ID = 0;
 		do {
 			input = getInput(info);
 			dataMap.put("ID", input);
-			//TODO mangler validering mod "ikke integers" før parsing
-		} while ((Integer.parseInt(input) < 11 || Integer.parseInt(input) > 99) && !input.equals("cancel"));
+			if(isInteger(input)) {
+				ID = Integer.parseInt(input);
+			}
+		} while ((ID < 11 || ID > 99) && !input.equals("cancel"));
 		return input;
 	}
 
-	private String getName(String info, HashMap<String, String> dataMap) {
+	private String getName(String info, HashMap<String, Object> dataMap) {
 		String input;
 		do {
 			input = getInput(info);
@@ -197,7 +211,7 @@ public class TUI implements UI {
 		return input;
 	}
 
-	private String getIni(String info, HashMap<String, String> dataMap) {
+	private String getIni(String info, HashMap<String, Object> dataMap) {
 		String input;
 		do {
 			input = getInput(info);
@@ -206,7 +220,7 @@ public class TUI implements UI {
 		return input;
 	}
 
-	private String getCpr(String info, HashMap<String, String> dataMap) {
+	private String getCpr(String info, HashMap<String, Object> dataMap) {
 		String input;
 		do {
 			input = getInput(info);
@@ -221,7 +235,7 @@ public class TUI implements UI {
 		return "";
 	}
 
-	private String getRole(String info, HashMap<String, String> dataMap) {
+	private String getRole(String info, HashMap<String, Object> dataMap) {
 		String input;
 		do {
 			input = getInput(info);

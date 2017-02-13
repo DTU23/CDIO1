@@ -8,7 +8,7 @@ import java.util.regex.*;
 
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 4545864587995944260L;
-    private int userId;
+    private int userID;
     private String userName;
     private String password;
     private String cpr;
@@ -21,6 +21,11 @@ public class UserDTO implements Serializable {
 
     public UserDTO(HashMap<String, Object> hashMap) throws DTOException {
         this.roles = new ArrayList<>();
+        if(hashMap.containsKey("ID")){
+            this.userID = Integer.parseInt(hashMap.get("ID").toString());
+        }else {
+            throw new DTOException("Not User ID Provided!");
+        }
         if (hashMap.containsKey("userName")) {
             this.userName = hashMap.get("userName").toString();
         } else {
@@ -45,12 +50,12 @@ public class UserDTO implements Serializable {
         }
     }
 
-    public int getUserId() {
-        return this.userId;
+    public int getUserID() {
+        return this.userID;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getUserName() {
@@ -79,9 +84,7 @@ public class UserDTO implements Serializable {
      * @param password
      */
     public void setPassword(String password) {
-        if (this.validatePassword(password)) {
-            this.password = password;
-        }
+        this.password = password;
     }
 
     /**
@@ -169,7 +172,7 @@ public class UserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "userID=" + userId + " password=" + password + " userName=" + userName + " ini=" + ini + " cpr=" + cpr + " roles=" + roles;
+        return "userID=" + userID + " password=" + password + " userName=" + userName + " ini=" + ini + " cpr=" + cpr + " roles=" + roles;
     }
 
     public class DTOException extends Exception {

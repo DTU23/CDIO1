@@ -9,12 +9,12 @@ import model.JSONPersistence;
 import model.UserDTO;
 
 public class Ctrl implements IUserDAO {
-    private final DataPersistence jsonPersistence;
+    private final DataPersistence dataPersistence;
     private final ArrayList<UserDTO> users;
 
     public Ctrl(){
-        this.jsonPersistence = new JSONPersistence(System.getProperty("user.dir")+"/src/model/data.json");
-        this.users = jsonPersistence.read();
+        this.dataPersistence = new JSONPersistence(System.getProperty("user.dir")+"/src/model/data.json");
+        this.users = dataPersistence.read();
     }
 
     @Override
@@ -36,6 +36,7 @@ public class Ctrl implements IUserDAO {
     public String createUser(HashMap<String, Object> hashMap){
         try {
             UserDTO user = new UserDTO(hashMap);
+            dataPersistence.write(this.users);
             return user.getPassword();
         }catch (UserDTO.DTOException e){
             e.printStackTrace();
@@ -90,6 +91,6 @@ public class Ctrl implements IUserDAO {
     }
 
     private void save(){
-        jsonPersistence.write(this.users);
+        dataPersistence.write(this.users);
     }
 }

@@ -7,7 +7,7 @@ import model.dto.UserDTO;
 public interface IUserDAO {
 	UserDTO getUser(int userId) throws DALException;
 	List<UserDTO> getUserList() throws DALException;
-	String createUser(HashMap<String, String> hashMap) throws DALException;
+	String createUser(HashMap<String, Object> hashMap) throws DALException;
 	boolean updateUser(UserDTO user) throws DALException;
 	boolean deleteUser(int userId) throws DALException;
 	

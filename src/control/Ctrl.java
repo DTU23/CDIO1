@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Ctrl implements IUserDAO {
-    private DataPersistence jsonPersistence;
-    private ArrayList<UserDTO> users;
+    private final DataPersistence jsonPersistence;
+    private final ArrayList<UserDTO> users;
 
     public Ctrl(){
         this.jsonPersistence = new JSONPersistence(System.getProperty("user.dir")+"/src/model/data.json");
@@ -34,13 +34,22 @@ public class Ctrl implements IUserDAO {
     }
 
     @Override
-    public String createUser(HashMap<String, String> hashMap){
+    public String createUser(HashMap<String, Object> hashMap){
         UserDTO user = new UserDTO();
+        user.setUserId(Integer.parseInt(hashMap.get("ID").toString()));
+        user.setIni(hashMap.get("ini").toString());
+        user.setCpr(hashMap.get("cpr").toString());
+        for (String role: (ArrayList<String>)hashMap.get("roles")) {
+            user.addRole(role);
+        }
+        user.setUserName(hashMap.get("username").toString());
         return "asdf";
     }
 
     @Override
     public boolean updateUser(UserDTO user){
+        users.remove(user.getUserId());
+        users.add(user);
         return true;
     }
 
@@ -49,7 +58,6 @@ public class Ctrl implements IUserDAO {
         for (int i = 0; i < this.users.size(); i++){
             if(this.users.get(i).getUserId() == userId){
                 this.users.remove(i);
-                System.out.println(this.generatePswd(10));
                 this.save();
                 return true;
             }
@@ -58,35 +66,28 @@ public class Ctrl implements IUserDAO {
     }
 
     public boolean editUser(HashMap<String, String> hashMap){
-        return true;
+        UserDTO user = this.getUser(Integer.parseInt(hashMap.get("ID")));
+        if (user == null){
+            return false;
+        }else{
+            user.setCpr(hashMap.get("cpr"));
+            user.setIni(hashMap.get("ini"));
+            user.setPassword(hashMap.get("password"));
+            user.setUserId(Integer.parseInt(hashMap.get("ID")));
+            return true;
+        }
     }
 
     public boolean exists(int userId){
-        for (int i = 0; i < this.users.size(); i++){
-            if(this.users.get(i).getUserId() == userId){
+        for (UserDTO user: users) {
+            if(user.getUserId() == userId){
                 return true;
             }
         }
         return false;
     }
 
-    private boolean save(){
-        return jsonPersistence.write(this.users);
-    }
-
-    static char[] generatePswd(int len){
-        System.out.println("Your Password ");
-        String charsCaps="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String Chars="abcdefghijklmnopqrstuvwxyz";
-        String nums="0123456789";
-        String symbols="!@#$%^&*()_+-=.,/';:?><~*/-+";
-        String passSymbols=charsCaps + Chars + nums +symbols;
-        Random random = new Random();
-        char[] password=new char[len];
-        int index=0;
-        for(int i=0; i<len;i++){
-            password[i]=passSymbols.charAt(random.nextInt(passSymbols.length()));
-        }
-        return password;
+    private void save(){
+        jsonPersistence.write(this.users);
     }
 }

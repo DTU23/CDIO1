@@ -126,20 +126,18 @@ public class UserDTO implements Serializable{
 	}
 
 	private boolean validatePassword(String password){
-		Pattern p = Pattern.compile("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}");
+		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?!.*"+this.userName+")(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
 		Matcher m = p.matcher(password);
 		return m.matches();
 	}
 
 	@Override
 	public String toString() {
-		return "\n [\n\t userID=" + userId + "\n\t userName=" + userName + "\n\t ini=" + ini + "\n\t cpr=" + cpr + "\n\t roles=" + roles+"\n ]\n";
+		return "userID=" + userId + " userName=" + userName + " ini=" + ini + " cpr=" + cpr + " roles=" + roles;
 	}
 
 	public class DTOException extends Exception{
-		
 		private static final long serialVersionUID = -7237020336150973814L;
-		
 		public DTOException(String msg, Throwable e){
 			super(msg, e);
 		}

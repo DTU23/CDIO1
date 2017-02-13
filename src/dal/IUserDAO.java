@@ -1,18 +1,17 @@
 package dal;
+import java.util.HashMap;
 import java.util.List;
 
 import dto.UserDTO;
 
 public interface IUserDAO {
-
 	UserDTO getUser(int userId) throws DALException;
 	List<UserDTO> getUserList() throws DALException;
-	void createUser(UserDTO user) throws DALException;
-	void updateUser(UserDTO user) throws DALException;
-	void deleteUser(int userId) throws DALException;
+	String createUser(HashMap<String, String> hashMap) throws DALException;
+	boolean updateUser(UserDTO user) throws DALException;
+	boolean deleteUser(int userId) throws DALException;
 	
 	public class DALException extends Exception {
-
 		/**
 		 * 
 		 */

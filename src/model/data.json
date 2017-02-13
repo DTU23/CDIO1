@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "userId": 1,
+      "userName": "Viktor",
+      "ini": "vp",
+      "cpr": "0101892077",
+      "password": "qweqwe",
+      "roles": ["Admin", "Pharmacist", "Foreman", "Operator"]
+    },
+    {
+      "userId": 2,
+      "userName": "Viktor",
+      "ini": "vp",
+      "cpr": "0101892077",
+      "password": "asdasd",
+      "roles": ["Admin", "Pharmacist", "Foreman", "Operator"]
+    }
+  ]
+}

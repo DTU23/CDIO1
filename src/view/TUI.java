@@ -2,6 +2,7 @@ package view;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import control.Ctrl;
 
 public class TUI implements UI {
 
@@ -9,7 +10,7 @@ public class TUI implements UI {
 	Scanner scanner;
 
 	public TUI() {
-		//TODO controller mangler
+		controller = new Ctrl();
 		scanner = new Scanner(System.in);
 	}
 

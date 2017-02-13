@@ -1,7 +1,11 @@
 /bin/
 /users.data
 
+# IDE-files
 .idea
 .settings
 .classpath
 .project
+
+# Compiler output
+out/

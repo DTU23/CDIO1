@@ -19,9 +19,9 @@ public class Ctrl implements IUserDAO {
     }
 
     @Override
-    public UserDTO getUser(int userId){
+    public UserDTO getUser(HashMap<String, Object> hashMap){
         for (int i = 0; i < this.users.size(); i++){
-            if(this.users.get(i).getUserId() == userId){
+            if(this.users.get(i).getUserId() == Integer.parseInt(hashMap.get("ID").toString())){
                 return this.users.get(i);
             }
         }
@@ -35,28 +35,31 @@ public class Ctrl implements IUserDAO {
 
     @Override
     public String createUser(HashMap<String, Object> hashMap){
-        UserDTO user = new UserDTO();
-        user.setUserId(Integer.parseInt(hashMap.get("ID").toString()));
-        user.setIni(hashMap.get("ini").toString());
-        user.setCpr(hashMap.get("cpr").toString());
-        for (String role: (ArrayList<String>)hashMap.get("roles")) {
-            user.addRole(role);
+        try {
+            UserDTO user = new UserDTO(hashMap);
+            return user.getPassword();
+        }catch (UserDTO.DTOException e){
+            e.printStackTrace();
         }
-        user.setUserName(hashMap.get("username").toString());
-        return "asdf";
+        return null;
     }
 
     @Override
-    public boolean updateUser(UserDTO user){
-        users.remove(user.getUserId());
-        users.add(user);
-        return true;
+    public boolean updateUser(HashMap<String, Object> hashMap){
+        users.remove(getUser(hashMap));
+        try {
+            users.add(new UserDTO(hashMap));
+            return true;
+        }catch (UserDTO.DTOException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public boolean deleteUser(int userId){
+    public boolean deleteUser(HashMap<String, Object> hashMap){
         for (int i = 0; i < this.users.size(); i++){
-            if(this.users.get(i).getUserId() == userId){
+            if(this.users.get(i).getUserId() == Integer.parseInt(hashMap.get("ID").toString())){
                 this.users.remove(i);
                 this.save();
                 return true;
@@ -65,22 +68,22 @@ public class Ctrl implements IUserDAO {
         return false;
     }
 
-    public boolean editUser(HashMap<String, String> hashMap){
-        UserDTO user = this.getUser(Integer.parseInt(hashMap.get("ID")));
+    public boolean editUser(HashMap<String, Object> hashMap){
+        UserDTO user = this.getUser(hashMap);
         if (user == null){
             return false;
         }else{
-            user.setCpr(hashMap.get("cpr"));
-            user.setIni(hashMap.get("ini"));
-            user.setPassword(hashMap.get("password"));
-            user.setUserId(Integer.parseInt(hashMap.get("ID")));
+            user.setCpr(hashMap.get("cpr").toString());
+            user.setIni(hashMap.get("ini").toString());
+            user.setPassword(hashMap.get("password").toString());
+            user.setUserId(Integer.parseInt(hashMap.get("ID").toString()));
             return true;
         }
     }
 
-    public boolean exists(int userId){
+    public boolean exists(HashMap<String, Object> hashMap){
         for (UserDTO user: users) {
-            if(user.getUserId() == userId){
+            if(user.getUserId() == Integer.parseInt(hashMap.get("ID").toString())){
                 return true;
             }
         }

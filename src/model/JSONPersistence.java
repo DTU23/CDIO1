@@ -81,14 +81,15 @@ public class JSONPersistence implements DataPersistence {
                 UserDTO userDTO = new UserDTO();
                 userDTO.setIni(jsonUser.get("ini").toString());
                 userDTO.setUserName(jsonUser.get("userName").toString());
-                userDTO.setUserId((int)(long)jsonUser.get("userId"));
+                userDTO.setUserId((int)(long)jsonUser.get("userID"));
                 userDTO.setPassword(jsonUser.get("password").toString());
                 userDTO.setCpr(jsonUser.get("cpr").toString());
 
                 JSONObject jsonRolesObject = (JSONObject) jsonUser;
-                JSONArray roles = (JSONArray) jsonRolesObject.get("roles");
-                for (Object role: roles) {
-                    userDTO.addRole(role.toString());
+                ArrayList<String> roles = new ArrayList<String>();
+                roles.addAll((ArrayList<String>) jsonRolesObject.get("roles"));
+                for (String role: roles) {
+                    userDTO.addRole(role);
                 }
                 userList.add(userDTO);
             }

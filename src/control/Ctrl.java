@@ -1,14 +1,12 @@
 package control;
 
-import control.dal.IUserDAO;
-import model.DataPersistence;
-import model.JSONPersistence;
-import model.UserDTO;
-
-import java.lang.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import model.DataPersistence;
+import model.IUserDAO;
+import model.JSONPersistence;
+import model.UserDTO;
 
 public class Ctrl implements IUserDAO {
     private final DataPersistence jsonPersistence;

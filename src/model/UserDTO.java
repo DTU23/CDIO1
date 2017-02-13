@@ -136,6 +136,9 @@ public class UserDTO implements Serializable{
 	}
 
 	public class DTOException extends Exception{
+		
+		private static final long serialVersionUID = -7237020336150973814L;
+		
 		public DTOException(String msg, Throwable e){
 			super(msg, e);
 		}

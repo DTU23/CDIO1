@@ -2,7 +2,7 @@ package control.dal;
 import java.util.HashMap;
 import java.util.List;
 
-import model.dto.UserDTO;
+import model.UserDTO;
 
 public interface IUserDAO {
 	UserDTO getUser(HashMap<String, Object> hashMap) throws DALException;

@@ -1,7 +1,9 @@
 package control;
 
 import control.dal.IUserDAO;
-import model.dto.UserDTO;
+import model.DataPersistence;
+import model.JSONPersistence;
+import model.UserDTO;
 
 import java.lang.*;
 

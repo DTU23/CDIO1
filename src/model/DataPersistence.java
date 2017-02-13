@@ -1,6 +1,4 @@
-package control;
-
-import model.dto.UserDTO;
+package model;
 
 import java.util.ArrayList;
 

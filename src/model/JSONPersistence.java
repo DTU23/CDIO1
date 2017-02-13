@@ -1,8 +1,8 @@
-package control;
+package model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.dto.UserDTO;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

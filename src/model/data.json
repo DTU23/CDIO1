@@ -1,12 +1,1 @@
-{
-  "users": [
-    {
-      "UserID": "1",
-      "UserName": "Viktor",
-      "ini": "vp",
-      "cpr": "010189-2077",
-      "password": "qweqwe",
-      "roles": ["Admin", "Pharmacist", "Foreman", "Operator"]
-    }
-  ]
-}
+{"password":"asdasd","cpr":"0101892077","ini":"vp","roles":["admin"],"userName":"Viktor","userId":2}

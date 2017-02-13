@@ -1,5 +1,6 @@
 package dto;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ public class UserDTO implements Serializable{
 	private static final long serialVersionUID = 4545864587995944260L;
 	private int	userId;
 	private String userName;
+	private String password;
+	private String cpr;
 	private String ini;
 	private List<String> roles;
 	//TODO Add relevant fields
@@ -33,6 +36,18 @@ public class UserDTO implements Serializable{
 	}
 	public void setIni(String ini) {
 		this.ini = ini;
+	}
+	public String getPassword(){
+		return this.password;
+	}
+	public void setPassword(String password){
+		this.password = password;
+	}
+	public String getCpr(){
+		return this.cpr;
+	}
+	public void setCpr(String cpr){
+		this.cpr = cpr;
 	}
 
 	public List<String> getRoles() {

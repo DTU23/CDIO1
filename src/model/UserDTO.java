@@ -38,6 +38,7 @@ public class UserDTO implements Serializable{
 		if(hashMap.containsKey("ini")){
 			this.setIni(hashMap.get("ini").toString());
 		}
+		// TODO add exceptionhandling for the casting
 		if(hashMap.containsKey("roles")){
 			roles.addAll((ArrayList<String>) hashMap.get("roles"));
 		}

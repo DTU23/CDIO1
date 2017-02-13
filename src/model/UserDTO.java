@@ -12,10 +12,10 @@ public class UserDTO implements Serializable{
 	private String password;
 	private String cpr;
 	private String ini;
-	private ArrayList<String> roles;
+	private ArrayList<String> roles = new ArrayList<String>();
 	
 	public UserDTO() throws DTOException{
-		this(new HashMap<String, Object>());
+
 	}
 
 	public UserDTO(HashMap<String, Object> hashMap) throws DTOException{
@@ -23,7 +23,7 @@ public class UserDTO implements Serializable{
 		if (hashMap.containsKey("username")){
 			this.userName = hashMap.get("username").toString();
 		}else{
-			throw new DTOException("Not username provided");
+			throw new DTOException("No username provided");
 		}
 		if(hashMap.containsKey("cpr")){
 			this.setCpr(hashMap.get("cpr").toString());
@@ -132,7 +132,7 @@ public class UserDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "\n [\n\t userId=" + userId + "\n\t userName=" + userName + "\n\t ini=" + ini + "\n\t CPR=" + cpr + "\n\t roles=" + roles+"\n ]\n";
+		return "\n [\n\t userID=" + userId + "\n\t userName=" + userName + "\n\t ini=" + ini + "\n\t cpr=" + cpr + "\n\t roles=" + roles+"\n ]\n";
 	}
 
 	public class DTOException extends Exception{

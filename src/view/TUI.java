@@ -1,8 +1,8 @@
 package view;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Scanner;
+
 import control.Ctrl;
 
 public class TUI implements UI {
@@ -62,7 +62,7 @@ public class TUI implements UI {
 		String password;
 
 		// gets ID
-		input = getID("Choose an ID between 11 and 99, or type cancel to go to main menu.", hashMap);
+		input = getValidID("Choose an ID between 11 and 99, or type cancel to go to main menu.", hashMap);
 
 		// gets user name
 		if(!input.equals("cancel")) {
@@ -100,15 +100,7 @@ public class TUI implements UI {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
 		// gets user to edit
-		do {
-			input = getInput("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.");
-			hashMap.put("ID", input);
-			if(isInteger(input)) {
-				if (!controller.exists(hashMap)) {
-					System.out.println("User doesn't exist!");
-				}
-			}
-		} while (!controller.exists(hashMap) && !input.equals("cancel"));
+		input = getExistingID("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.", hashMap);
 
 		if(!input.equals("cancel")) {
 			loop:
@@ -155,26 +147,24 @@ public class TUI implements UI {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
 		// gets user to delete
-		do {
-			input = getInput("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.");
-			hashMap.put("ID", input);
-			if(isInteger(input)) {
-				if (!controller.exists(hashMap)) {
-					System.out.println("User doesn't exist!");
-				}
-			}
-		} while (!controller.exists(hashMap) && !input.equals("cancel"));
+		input = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
 
 		// confirmation
-		input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
-				+ "Type confirm or cancel.");
+		do {
+			input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
+					+ "Type confirm or cancel.");
+			if(!input.equals("confirm") || !input.equals("cancel")) {
+				System.out.println("Invalid command.");
+			}
+		} while(!input.equals("confirm") || !input.equals("cancel"));
+		// executes if confirmed
 		if(input.equals("confirm")) {
 			controller.deleteUser(hashMap);
 		}
 	}
 
-	private String getInput(String info) {
-		System.out.println(info);
+	private String getInput(String message) {
+		System.out.println(message);
 		String input = scanner.nextLine();
 		return input;
 	}
@@ -189,11 +179,25 @@ public class TUI implements UI {
 		}
 	}
 
-	private String getID(String info, HashMap<String, Object> dataMap) {
+	private String getExistingID(String message, HashMap<String, Object> hashMap) {
+		String input;
+		do {
+			input = getInput(message);
+			hashMap.put("ID", input);
+			if(isInteger(input)) {
+				if (!controller.exists(hashMap)) {
+					System.out.println("User doesn't exist!");
+				}
+			}
+		} while (!controller.exists(hashMap) && !input.equals("cancel"));
+		return input;
+	}
+
+	private String getValidID(String message, HashMap<String, Object> dataMap) {
 		String input;
 		int ID = 0;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("ID", input);
 			if(isInteger(input)) {
 				ID = Integer.parseInt(input);
@@ -202,43 +206,43 @@ public class TUI implements UI {
 		return input;
 	}
 
-	private String getName(String info, HashMap<String, Object> dataMap) {
+	private String getName(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("userName", input);
 		} while ((input.length() < 2 || input.length() > 20) && !input.equals("cancel"));
 		return input;
 	}
 
-	private String getIni(String info, HashMap<String, Object> dataMap) {
+	private String getIni(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("ini", input);
 		} while ((input.length() < 2 || input.length() > 4) && !input.equals("cancel"));
 		return input;
 	}
 
-	private String getCpr(String info, HashMap<String, Object> dataMap) {
+	private String getCpr(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("cpr", input);
 		} while (input.length() != 10 && !input.equals("cancel"));
 		//TODO validering af cpr-nummer?
 		return input;
 	}
 
-	private String changePassword(String info) {
+	private String changePassword(String message) {
 		//TODO password validering
 		return "";
 	}
 
-	private String getRole(String info, HashMap<String, Object> dataMap) {
+	private String getRole(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("role", input);
 		} while ((!input.equals("Admin") && !input.equals("Pharmacist") && !input.equals("Foreman") && !input.equals("Operator"))
 				&& !input.equals("cancel"));

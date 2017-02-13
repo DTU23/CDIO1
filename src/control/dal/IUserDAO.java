@@ -1,8 +1,8 @@
-package dal;
+package control.dal;
 import java.util.HashMap;
 import java.util.List;
 
-import dto.UserDTO;
+import model.dto.UserDTO;
 
 public interface IUserDAO {
 	UserDTO getUser(int userId) throws DALException;

@@ -1,8 +1,7 @@
 package control;
 
-import com.sun.xml.internal.fastinfoset.util.CharArray;
-import dal.IUserDAO;
-import dto.UserDTO;
+import control.dal.IUserDAO;
+import model.dto.UserDTO;
 
 import java.lang.*;
 

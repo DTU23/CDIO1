@@ -6,11 +6,11 @@ import control.Ctrl;
 
 public class TUI implements UI {
 
-	Ctrl controller;
-	Scanner scanner;
+	private Ctrl controller;
+	private Scanner scanner;
 
-	public TUI() {
-		controller = new Ctrl();
+	public TUI(Ctrl controller) {
+		this.controller = controller;
 		scanner = new Scanner(System.in);
 	}
 

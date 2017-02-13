@@ -12,18 +12,18 @@ public class UserDTO implements Serializable{
 	private String password;
 	private String cpr;
 	private String ini;
-	private ArrayList<String> roles = new ArrayList<String>();
-
+	private ArrayList<String> roles;
+	
 	public UserDTO() throws DTOException{
-
+		this(new HashMap<String, Object>());
 	}
 
 	public UserDTO(HashMap<String, Object> hashMap) throws DTOException{
 		this.roles = new ArrayList<>();
-		if (hashMap.containsKey("userName")){
-			this.userName = hashMap.get("userName").toString();
+		if (hashMap.containsKey("username")){
+			this.userName = hashMap.get("username").toString();
 		}else{
-			throw new DTOException("No username provided");
+			throw new DTOException("Not username provided");
 		}
 		if(hashMap.containsKey("cpr")){
 			this.setCpr(hashMap.get("cpr").toString());

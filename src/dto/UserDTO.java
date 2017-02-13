@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO implements Serializable{
-
 	private static final long serialVersionUID = 4545864587995944260L;
-	private int	userId;                     
-	private String userName;                
-	private String ini;                 
+	private int	userId;
+	private String userName;
+	private String ini;
 	private List<String> roles;
 	//TODO Add relevant fields
 	
@@ -18,13 +17,13 @@ public class UserDTO implements Serializable{
 	}
 	
 	public int getUserId() {
-		return userId;
+		return this.userId;
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	public String getUserName() {
-		return userName;
+		return this.userName;
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -37,7 +36,7 @@ public class UserDTO implements Serializable{
 	}
 
 	public List<String> getRoles() {
-		return roles;
+		return this.roles;
 	}
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
@@ -59,7 +58,4 @@ public class UserDTO implements Serializable{
 	public String toString() {
 		return "UserDTO [userId=" + userId + ", userName=" + userName + ", ini=" + ini + ", roles=" + roles + "]";
 	}
-	
-	
-	
 }

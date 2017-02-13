@@ -1,16 +1,16 @@
 package model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class JSONPersistence implements DataPersistence {
     private String filePath;

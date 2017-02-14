@@ -12,7 +12,7 @@ public class UserDAO {
 
 	public UserDAO(IDataStorage storage) {
 		this.storage = storage;
-		this.storage.read();
+		users = this.storage.read();
 	}
 
 	public UserDTO getUser(int userId) throws DALException {

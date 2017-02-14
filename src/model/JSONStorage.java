@@ -12,14 +12,14 @@ import org.json.simple.parser.JSONParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class JSONPersistence implements DataPersistence {
+public class JSONStorage implements IDataStorage {
     private String filePath;
 
     /**
      * Constructor implements datapersistence by getting filepath passed.
      * @param filePath
      */
-    public JSONPersistence(String filePath){
+    public JSONStorage(String filePath){
         this.filePath = filePath;
     }
 
@@ -40,7 +40,7 @@ public class JSONPersistence implements DataPersistence {
             user.put("cpr", users.get(i).getCpr());
             user.put("ini", users.get(i).getIni());
             user.put("userName", users.get(i).getUserName());
-            user.put("userId", users.get(i).getUserId());
+            user.put("userID", users.get(i).getUserID());
             JSONArray roles = new JSONArray();
             for (String role: users.get(i).getRoles()) {
                 roles.add(role);
@@ -81,14 +81,15 @@ public class JSONPersistence implements DataPersistence {
                 UserDTO userDTO = new UserDTO();
                 userDTO.setIni(jsonUser.get("ini").toString());
                 userDTO.setUserName(jsonUser.get("userName").toString());
-                userDTO.setUserId((int)(long)jsonUser.get("userId"));
+                userDTO.setUserID((int)(long)jsonUser.get("userID"));
                 userDTO.setPassword(jsonUser.get("password").toString());
                 userDTO.setCpr(jsonUser.get("cpr").toString());
 
                 JSONObject jsonRolesObject = (JSONObject) jsonUser;
-                JSONArray roles = (JSONArray) jsonRolesObject.get("roles");
-                for (Object role: roles) {
-                    userDTO.addRole(role.toString());
+                ArrayList<String> roles = new ArrayList<String>();
+                roles.addAll((ArrayList<String>) jsonRolesObject.get("roles"));
+                for (String role: roles) {
+                    userDTO.addRole(role);
                 }
                 userList.add(userDTO);
             }

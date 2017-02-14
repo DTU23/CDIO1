@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  *
  */
-public interface DataPersistence {
+public interface IDataStorage {
     /**
      * Updates memory to persistent data. Returns false on error
      * @param users

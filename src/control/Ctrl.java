@@ -3,39 +3,37 @@ package control;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.DataPersistence;
-import model.IUserDAO;
-import model.JSONPersistence;
+import model.IDataStorage;
+import model.JSONStorage;
 import model.UserDTO;
 
-public class Ctrl implements IUserDAO {
-    private final DataPersistence jsonPersistence;
+public class Ctrl {
+    private final IDataStorage dataPersistence;
     private final ArrayList<UserDTO> users;
 
     public Ctrl(){
-        this.jsonPersistence = new JSONPersistence(System.getProperty("user.dir")+"/src/model/data.json");
-        this.users = jsonPersistence.read();
+        this.dataPersistence = new JSONStorage(System.getProperty("user.dir")+"/src/model/data.json");
+        this.users = dataPersistence.read();
     }
 
-    @Override
     public UserDTO getUser(HashMap<String, Object> hashMap){
         for (int i = 0; i < this.users.size(); i++){
-            if(this.users.get(i).getUserId() == Integer.parseInt(hashMap.get("ID").toString())){
+            if(this.users.get(i).getUserID() == Integer.parseInt(hashMap.get("ID").toString())){
                 return this.users.get(i);
             }
         }
         return null;
     }
 
-    @Override
     public ArrayList<UserDTO> getUserList(){
         return this.users;
     }
 
-    @Override
     public String createUser(HashMap<String, Object> hashMap){
         try {
             UserDTO user = new UserDTO(hashMap);
+            this.users.add(user);
+            this.save();
             return user.getPassword();
         }catch (UserDTO.DTOException e){
             e.printStackTrace();
@@ -43,7 +41,6 @@ public class Ctrl implements IUserDAO {
         return null;
     }
 
-    @Override
     public boolean updateUser(HashMap<String, Object> hashMap){
         users.remove(getUser(hashMap));
         try {
@@ -55,10 +52,9 @@ public class Ctrl implements IUserDAO {
         }
     }
 
-    @Override
     public boolean deleteUser(HashMap<String, Object> hashMap){
         for (int i = 0; i < this.users.size(); i++){
-            if(this.users.get(i).getUserId() == Integer.parseInt(hashMap.get("ID").toString())){
+            if(this.users.get(i).getUserID() == Integer.parseInt(hashMap.get("ID").toString())){
                 this.users.remove(i);
                 this.save();
                 return true;
@@ -72,17 +68,25 @@ public class Ctrl implements IUserDAO {
         if (user == null){
             return false;
         }else{
-            user.setCpr(hashMap.get("cpr").toString());
-            user.setIni(hashMap.get("ini").toString());
-            user.setPassword(hashMap.get("password").toString());
-            user.setUserId(Integer.parseInt(hashMap.get("ID").toString()));
+            if (hashMap.containsKey("cpr")){
+                user.setCpr(hashMap.get("cpr").toString());
+            }
+            if (hashMap.containsKey("ini")){
+                user.setIni(hashMap.get("ini").toString());
+            }
+            if (hashMap.containsKey("password")){
+                user.setPassword(hashMap.get("password").toString());
+            }
+            if(hashMap.containsKey("ID")){
+                user.setUserID(Integer.parseInt(hashMap.get("ID").toString()));
+            }
             return true;
         }
     }
 
     public boolean exists(HashMap<String, Object> hashMap){
         for (UserDTO user: users) {
-            if(user.getUserId() == Integer.parseInt(hashMap.get("ID").toString())){
+            if(user.getUserID() == Integer.parseInt(hashMap.get("ID").toString())){
                 return true;
             }
         }
@@ -90,6 +94,6 @@ public class Ctrl implements IUserDAO {
     }
 
     private void save(){
-        jsonPersistence.write(this.users);
+        dataPersistence.write(this.users);
     }
 }

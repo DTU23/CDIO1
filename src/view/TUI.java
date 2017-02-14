@@ -1,8 +1,11 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Scanner;
+
 import control.Ctrl;
 
 public class TUI implements UI {
@@ -30,8 +33,7 @@ public class TUI implements UI {
 						+ "list - prints a list of all the current users.\n"
 						+ "edit - lets you edit current users.\n"
 						+ "delete - deletes a user by ID.\n"
-						+ "exit - terminates the program.");
-				choice = choice.toLowerCase();
+						+ "exit - terminates the program.").toLowerCase();
 				// divides the flow
 				switch (choice) {
 				case "create":
@@ -62,7 +64,7 @@ public class TUI implements UI {
 		String password;
 
 		// gets ID
-		input = getID("Choose an ID between 11 and 99, or type cancel to go to main menu.", hashMap);
+		input = getValidID("Choose an ID between 11 and 99, or type cancel to go to main menu.", hashMap);
 
 		// gets user name
 		if(!input.equals("cancel")) {
@@ -81,7 +83,7 @@ public class TUI implements UI {
 
 		// gets role
 		if(!input.equals("cancel")) {
-			input = getRole("Choose a role from Admin, Pharmacist, Foreman or Operator, or type cancel to go to main menu.", hashMap);
+			input = getRoles("Choose a role from Admin, Pharmacist, Foreman or Operator, or type cancel to go to main menu.", hashMap);
 		}
 
 		if(!input.equals("cancel")) {
@@ -100,15 +102,7 @@ public class TUI implements UI {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
 		// gets user to edit
-		do {
-			input = getInput("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.");
-			hashMap.put("ID", input);
-			if(isInteger(input)) {
-				if (!controller.exists(hashMap)) {
-					System.out.println("User doesn't exist!");
-				}
-			}
-		} while (!controller.exists(hashMap) && !input.equals("cancel"));
+		input = getExistingID("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.", hashMap);
 
 		if(!input.equals("cancel")) {
 			loop:
@@ -118,10 +112,9 @@ public class TUI implements UI {
 							+ "The available commands are:\n"
 							+ "name - lets you change the user name.\n"
 							+ "ini - lets you change the initials.\n"
-							+ "password - lets you change the password.\n"
+							+ "password - gives you a new password.\n"
 							+ "role - lets you change the role\n"
-							+ "cancel - takes you to main menu.");
-					choice = choice.toLowerCase();
+							+ "cancel - takes you to main menu.").toLowerCase();
 					// divides the flow
 					switch (choice) {
 					case "name":
@@ -134,11 +127,12 @@ public class TUI implements UI {
 						getCpr("Type new social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
 						break loop;
 					case "password":
-						changePassword("TODO");
-						//TODO
+						changePassword("");
+						//TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
 						break loop;
 					case "role":
-						getRole("Choose a role from Admin, Pharmacist, Foreman or Operater, or type cancel to go to main menu.", hashMap);
+						getRoles("Choose roles from admin, pharmacist, foreman or operater, type done to finish adding roles " +
+								"or type cancel to go to main menu. You must add atleast one role.", hashMap);
 						break loop;
 					case "cancel":
 						break loop;
@@ -155,94 +149,153 @@ public class TUI implements UI {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
 		// gets user to delete
-		do {
-			input = getInput("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.");
-			hashMap.put("ID", input);
-			if(isInteger(input)) {
-				if (!controller.exists(hashMap)) {
-					System.out.println("User doesn't exist!");
-				}
-			}
-		} while (!controller.exists(hashMap) && !input.equals("cancel"));
+		input = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
 
 		// confirmation
-		input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
-				+ "Type confirm or cancel.");
+		do {
+			input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
+					+ "Type confirm or cancel.");
+			if(!input.equals("confirm") || !input.equals("cancel")) {
+				System.out.println("Invalid command.");
+			}
+		} while(!input.equals("confirm") || !input.equals("cancel"));
+		// executes if confirmed
 		if(input.equals("confirm")) {
 			controller.deleteUser(hashMap);
 		}
 	}
 
-	private String getInput(String info) {
-		System.out.println(info);
+	private String getInput(String message) {
+		System.out.println(message);
 		String input = scanner.nextLine();
 		return input;
 	}
 
-	private boolean isInteger(String input) {
+	private boolean isPositiveInteger(String input) {
 		try {
-			Integer.parseInt(input);
-			return true;
+			int i = Integer.parseInt(input);
+			if(i >= 0) {
+				return true;
+			} else {
+				return false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
 
-	private String getID(String info, HashMap<String, Object> dataMap) {
+	//TODO validering af sidste 4 cifre mangler stadig
+	private boolean isValidCpr(String input) {
+		if(isPositiveInteger(input)) {
+			int month = Integer.parseInt(input.substring(2, 3));
+			// Checks if month is valid
+			if(month > 0 && month < 13) {
+				for(int i = 1900; i < 2100; i += 100) {
+					int day = Integer.parseInt(input.substring(0, 1));
+					int year = Integer.parseInt(i + input.substring(4, 5));
+					// Creates a calendar object and sets year and month
+					Calendar mycal = new GregorianCalendar(year, month, 1);
+					// Get the number of days in that month
+					int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+					// Checks if day is valid
+					if(day > 0 && day <= daysInMonth) {
+						return true;
+					}
+				}
+				return false;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	private String getExistingID(String message, HashMap<String, Object> hashMap) {
+		String input;
+		do {
+			input = getInput(message);
+			hashMap.put("ID", input);
+			if(isPositiveInteger(input)) {
+				if (!controller.exists(hashMap)) {
+					System.out.println("User doesn't exist!");
+				}
+			}
+		} while (!controller.exists(hashMap) && !input.equals("cancel"));
+		return input;
+	}
+
+	private String getValidID(String message, HashMap<String, Object> dataMap) {
 		String input;
 		int ID = 0;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("ID", input);
-			if(isInteger(input)) {
+			if(isPositiveInteger(input)) {
 				ID = Integer.parseInt(input);
 			}
 		} while ((ID < 11 || ID > 99) && !input.equals("cancel"));
 		return input;
 	}
 
-	private String getName(String info, HashMap<String, Object> dataMap) {
+	private String getName(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("userName", input);
 		} while ((input.length() < 2 || input.length() > 20) && !input.equals("cancel"));
 		return input;
 	}
 
-	private String getIni(String info, HashMap<String, Object> dataMap) {
+	private String getIni(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
-			input = getInput(info);
-			dataMap.put("ini", input);
+			input = getInput(message);
+			dataMap.put("ini", input.toUpperCase());
 		} while ((input.length() < 2 || input.length() > 4) && !input.equals("cancel"));
 		return input;
 	}
 
-	private String getCpr(String info, HashMap<String, Object> dataMap) {
+	private String getCpr(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
-			input = getInput(info);
+			input = getInput(message);
 			dataMap.put("cpr", input);
-		} while (input.length() != 10 && !input.equals("cancel"));
-		//TODO validering af cpr-nummer?
+		} while (!isValidCpr(input) && !input.equals("cancel"));
 		return input;
 	}
 
-	private String changePassword(String info) {
-		//TODO password validering
-		return "";
+	private void changePassword(String message) {
+		System.out.println(controller.changePassword());
+		//TODO besked m.m skal implementeres her hvis bruger skal vælge nyt kodeord
 	}
 
-	private String getRole(String info, HashMap<String, Object> dataMap) {
+	private String getRoles(String message, HashMap<String, Object> dataMap) {
+		ArrayList<String> validRoles = new ArrayList<>();
+		validRoles.add("admin");
+		validRoles.add("pharmacist");
+		validRoles.add("foreman");
+		validRoles.add("operator");
+		ArrayList<String> chosenRoles = new ArrayList<>();
 		String input;
 		do {
-			input = getInput(info);
-			dataMap.put("role", input);
-		} while ((!input.equals("Admin") && !input.equals("Pharmacist") && !input.equals("Foreman") && !input.equals("Operator"))
-				&& !input.equals("cancel"));
-		//TODO flere roller?
+			// gets input
+			input = getInput(message).toLowerCase();
+			// if its a valid role
+			if(validRoles.contains(input)) {
+				// if its not already added
+				if(!chosenRoles.contains(input)) {
+					chosenRoles.add(input);
+				} else {
+					System.out.println("Role already chosen.");
+				}
+			}
+		} while (!input.equals("done") && !input.equals("cancel"));
+		// executes if user didn't type cancel
+		if(!input.equals("cancel")) {
+			dataMap.put("roles", chosenRoles);
+		}
 		return input;
 	}
 }

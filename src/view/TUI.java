@@ -1,6 +1,8 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -169,12 +171,43 @@ public class TUI implements UI {
 		return input;
 	}
 
-	private boolean isInteger(String input) {
+	private boolean isPositiveInteger(String input) {
 		try {
-			Integer.parseInt(input);
-			return true;
+			int i = Integer.parseInt(input);
+			if(i >= 0) {
+				return true;
+			} else {
+				return false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
+		}
+	}
+
+	//TODO validering af sidste 4 cifre mangler stadig
+	private boolean isValidCpr(String input) {
+		if(isPositiveInteger(input)) {
+			int month = Integer.parseInt(input.substring(2, 3));
+			// Checks if month is valid
+			if(month > 0 && month < 13) {
+				for(int i = 1900; i < 2100; i += 100) {
+					int day = Integer.parseInt(input.substring(0, 1));
+					int year = Integer.parseInt(i + input.substring(4, 5));
+					// Creates a calendar object and sets year and month
+					Calendar mycal = new GregorianCalendar(year, month, 1);
+					// Get the number of days in that month
+					int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+					// Checks if day is valid
+					if(day > 0 && day <= daysInMonth) {
+						return true;
+					}
+				}
+				return false;
+			} else {
+				return false;
+			}
+		} else {
 			return false;
 		}
 	}
@@ -184,7 +217,7 @@ public class TUI implements UI {
 		do {
 			input = getInput(message);
 			hashMap.put("ID", input);
-			if(isInteger(input)) {
+			if(isPositiveInteger(input)) {
 				if (!controller.exists(hashMap)) {
 					System.out.println("User doesn't exist!");
 				}
@@ -199,7 +232,7 @@ public class TUI implements UI {
 		do {
 			input = getInput(message);
 			dataMap.put("ID", input);
-			if(isInteger(input)) {
+			if(isPositiveInteger(input)) {
 				ID = Integer.parseInt(input);
 			}
 		} while ((ID < 11 || ID > 99) && !input.equals("cancel"));
@@ -229,8 +262,7 @@ public class TUI implements UI {
 		do {
 			input = getInput(message);
 			dataMap.put("cpr", input);
-		} while (input.length() != 10 && !input.equals("cancel"));
-		//TODO validering af cpr-nummer?
+		} while (!isValidCpr(input) && !input.equals("cancel"));
 		return input;
 	}
 

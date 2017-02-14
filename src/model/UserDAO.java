@@ -7,29 +7,53 @@ import model.IDataStorage.DALException;
 
 public class UserDAO {
 
-	public UserDTO getUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
+	private IDataStorage storage;
+	private List<UserDTO> users;
+
+	public UserDAO(IDataStorage storage) {
+		this.storage = storage;
+		this.storage.read();
+	}
+
+	public UserDTO getUser(int userId) throws DALException {
+		for (UserDTO user : users) {
+			if (user.getUserId() == userId) {
+				return user;
+			}
+		}
 		return null;
 	}
 
 	public List<UserDTO> getUserList() throws DALException {
-		// TODO Auto-generated method stub
-		return null;
+		return users;
 	}
 
-	public String createUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
-		return null;
+	public void createUser(UserDTO user) throws DALException {
+		users.add(user);
 	}
 
-	public boolean updateUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
-		return false;
+	public void updateUser(UserDTO user) throws DALException {
+		UserDTO temp = user;
+		deleteUser(user.getUserId());
+		createUser(temp);
 	}
 
-	public boolean deleteUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
+	public void deleteUser(int userId) throws DALException {
+		for (UserDTO user : users) {
+			if (user.getUserId() == userId) {
+				users.remove(user);
+			}
+		}
+	}
+
+	public boolean userExists(int userId) throws DALException {
+		for (UserDTO user : users) {
+			if (user.getUserId() == userId) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 }
+

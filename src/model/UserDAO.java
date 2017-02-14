@@ -1,8 +1,6 @@
 package model;
 
-import java.util.HashMap;
 import java.util.List;
-
 import model.IDataStorage.DALException;
 
 public class UserDAO {
@@ -17,7 +15,7 @@ public class UserDAO {
 
 	public UserDTO getUser(int userId) throws DALException {
 		for (UserDTO user : users) {
-			if (user.getUserId() == userId) {
+			if (user.getUserID() == userId) {
 				return user;
 			}
 		}
@@ -33,14 +31,14 @@ public class UserDAO {
 	}
 
 	public void updateUser(UserDTO user) throws DALException {
-		UserDTO temp = user;
-		deleteUser(user.getUserId());
+		UserDTO temp = user; //TODO Is this an unecessary temp?
+		deleteUser(user.getUserID());
 		createUser(temp);
 	}
 
 	public void deleteUser(int userId) throws DALException {
 		for (UserDTO user : users) {
-			if (user.getUserId() == userId) {
+			if (user.getUserID() == userId) {
 				users.remove(user);
 			}
 		}
@@ -48,7 +46,7 @@ public class UserDAO {
 
 	public boolean userExists(int userId) throws DALException {
 		for (UserDTO user : users) {
-			if (user.getUserId() == userId) {
+			if (user.getUserID() == userId) {
 				return true;
 			}
 		}

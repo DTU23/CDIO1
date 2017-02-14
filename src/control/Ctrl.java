@@ -3,21 +3,19 @@ package control;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.DataPersistence;
-import model.IUserDAO;
-import model.JSONPersistence;
+import model.IDataStorage;
+import model.JSONStorage;
 import model.UserDTO;
 
-public class Ctrl implements IUserDAO {
-    private final DataPersistence dataPersistence;
+public class Ctrl {
+    private final IDataStorage dataPersistence;
     private final ArrayList<UserDTO> users;
 
     public Ctrl(){
-        this.dataPersistence = new JSONPersistence(System.getProperty("user.dir")+"/src/model/data.json");
+        this.dataPersistence = new JSONStorage(System.getProperty("user.dir")+"/src/model/data.json");
         this.users = dataPersistence.read();
     }
 
-    @Override
     public UserDTO getUser(HashMap<String, Object> hashMap){
         for (int i = 0; i < this.users.size(); i++){
             if(this.users.get(i).getUserID() == Integer.parseInt(hashMap.get("ID").toString())){
@@ -27,12 +25,10 @@ public class Ctrl implements IUserDAO {
         return null;
     }
 
-    @Override
     public ArrayList<UserDTO> getUserList(){
         return this.users;
     }
 
-    @Override
     public String createUser(HashMap<String, Object> hashMap){
         try {
             UserDTO user = new UserDTO(hashMap);
@@ -45,7 +41,6 @@ public class Ctrl implements IUserDAO {
         return null;
     }
 
-    @Override
     public boolean updateUser(HashMap<String, Object> hashMap){
         users.remove(getUser(hashMap));
         try {
@@ -57,7 +52,6 @@ public class Ctrl implements IUserDAO {
         }
     }
 
-    @Override
     public boolean deleteUser(HashMap<String, Object> hashMap){
         for (int i = 0; i < this.users.size(); i++){
             if(this.users.get(i).getUserID() == Integer.parseInt(hashMap.get("ID").toString())){

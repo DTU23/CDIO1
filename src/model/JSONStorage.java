@@ -12,14 +12,14 @@ import org.json.simple.parser.JSONParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class JSONPersistence implements DataPersistence {
+public class JSONStorage implements IDataStorage {
     private String filePath;
 
     /**
      * Constructor implements datapersistence by getting filepath passed.
      * @param filePath
      */
-    public JSONPersistence(String filePath){
+    public JSONStorage(String filePath){
         this.filePath = filePath;
     }
 

@@ -13,18 +13,26 @@ public class FileStorage implements IDataStorage {
 
     @Override
     public boolean write(ArrayList<UserDTO> users) {
+        FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 
         try {
-            FileOutputStream fOS = new FileOutputStream(path);
+
+            // Serialize the collection of UserDTO's
+            fOS = new FileOutputStream(path);
             oOS = new ObjectOutputStream(fOS);
-            oOS.writeObject(users);
+
+            // Write every object to the file
+            for (UserDTO user : users) {
+                oOS.writeObject(user);
+            }
+
         } catch (FileNotFoundException e) {
             throw new DALException("Error locating file", e);
         } catch (IOException e) {
             throw new DALException("Error writing to disk", e);
         } finally {
-            if (oOS!=null) {
+            if (oOS != null) {
                 try {
                     oOS.close();
                 } catch (IOException e) {
@@ -32,22 +40,34 @@ public class FileStorage implements IDataStorage {
                 }
             }
         }
+
+        return true;
     }
 
     @Override
-    public ArrayList<UserDTO> read() throws DALException {
-        UserDAO userStore = new UserDAO(path);
+    public ArrayList<UserDTO> read() {
+        ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
+        FileInputStream fIS = null;
         ObjectInputStream oIS = null;
+
         try {
 
-            FileInputStream fIS = new FileInputStream(path);
+            // Deserialize the file back into the collection
+            fIS = new FileInputStream(path);
             oIS = new ObjectInputStream(fIS);
-            Object inObj = oIS.readObject();
 
-            if (inObj instanceof UserDAO){
-                userStore = (UserDAO) inObj;
-            } else {
-                throw new DALException("Wrong object in file");
+            // Pull every object into the ArrayList
+            try {
+                while (true) {
+                    UserDTO user = (UserDTO) oIS.readObject();
+                    if (user instanceof UserDAO) {
+                        userList.add(user);
+                    } else {
+                        throw new DALException("Wrong object in file");
+                    }
+                }
+            } catch (EOFException e) {
+                // No problem - no more objects to import
             }
 
         } catch (FileNotFoundException e) {
@@ -57,7 +77,7 @@ public class FileStorage implements IDataStorage {
         } catch (ClassNotFoundException e) {
             throw new DALException("Error while reading file - Class not found!", e);
         } finally {
-            if (oIS!=null){
+            if (oIS != null){
                 try {
                     oIS.close();
                 } catch (IOException e) {
@@ -66,7 +86,7 @@ public class FileStorage implements IDataStorage {
             }
         }
 
-        return userStore;
+        return userList;
     }
 
     public boolean fileExists() {

@@ -2,16 +2,20 @@ package control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import model.IDataStorage;
 import model.JSONStorage;
+import model.UserDAO;
 import model.UserDTO;
 
 public class Ctrl {
     private final IDataStorage dataPersistence;
     private final ArrayList<UserDTO> users;
 
-    public Ctrl(){
+    public Ctrl(UserDAO dao){
         this.dataPersistence = new JSONStorage(System.getProperty("user.dir")+"/src/model/data.json");
         this.users = dataPersistence.read();
     }
@@ -91,6 +95,39 @@ public class Ctrl {
             }
         }
         return false;
+    }
+
+    public String changePassword(){
+        return generatePassword(10);
+    }
+
+
+    /**
+     * Generates a valid password for current user
+     * @param length
+     * @return
+     */
+    private String generatePassword(int length) {
+        String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String characters = "abcdefghijklmnopqrstuvwxyz";
+        String numbers = "0123456789";
+        String symbols = "!@#$&*";
+        String passwordCharacters = charactersCaps + characters + numbers + symbols;
+        Random rnd = new Random();
+        char[] password = new char[length];
+
+        /*do {
+            for (int i = 0; i < length; i++) {
+                password[i] = passwordCharacters.charAt(rnd.nextInt(passwordCharacters.length()));
+            }
+        }while (!this.validatePassword(new String(password), hashMap));*/
+        return new String(password);
+    }
+
+    private boolean validatePassword(String password, HashMap<String, Object> hashMap) {
+        Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?!.*" + hashMap.get("userName").toString() + ")(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
+        Matcher m = p.matcher(password);
+        return m.matches();
     }
 
     private void save(){

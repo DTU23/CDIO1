@@ -11,14 +11,14 @@ public interface IDataStorage {
      * @param users
      * @return boolean Error
      */
-    boolean write(ArrayList<UserDTO> users);
+    boolean write(ArrayList<UserDTO> users) throws DALException;
     //TODO lav noget exception throwing handling i stedet for boolean return
 
     /**
      * Reads data input to memory
      * @return ArrayList<UserDTO>
      */
-    ArrayList<UserDTO> read();
+    ArrayList<UserDTO> read() throws DALException;
     
   	public class DALException extends Exception {
   		

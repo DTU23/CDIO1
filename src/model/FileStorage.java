@@ -7,12 +7,15 @@ public class FileStorage implements IDataStorage {
 
     private String path;
 
+    public FileStorage(){
+        this(System.getProperty("user.dir")+"/src/model/data.txt");
+    }
     public FileStorage(String path) {
         this.path = path;
     }
 
     @Override
-    public boolean write(ArrayList<UserDTO> users) {
+    public boolean write(ArrayList<UserDTO> users) throws DALException {
         FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 
@@ -45,7 +48,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public ArrayList<UserDTO> read() {
+    public ArrayList<UserDTO> read() throws DALException{
         ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
         FileInputStream fIS = null;
         ObjectInputStream oIS = null;
@@ -60,7 +63,7 @@ public class FileStorage implements IDataStorage {
             try {
                 while (true) {
                     UserDTO user = (UserDTO) oIS.readObject();
-                    if (user instanceof UserDAO) {
+                    if (user instanceof UserDTO) {
                         userList.add(user);
                     } else {
                         throw new DALException("Wrong object in file");

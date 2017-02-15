@@ -185,7 +185,6 @@ public class TUI implements UI {
 		}
 	}
 
-	//TODO validering af sidste 4 cifre mangler stadig
 	private boolean isValidCpr(String input) {
 		if(isPositiveInteger(input)) {
 			int month = Integer.parseInt(input.substring(2, 3));
@@ -200,7 +199,17 @@ public class TUI implements UI {
 					int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
 					// Checks if day is valid
 					if(day > 0 && day <= daysInMonth) {
-						return true;
+						// check if full cpr is valid
+						int CprProductSum = 0;
+						int[] multiplyBy = {4,3,2,7,6,5,4,3,2,1};
+						for(int j = 0; j < input.length(); j++) {
+							CprProductSum += Integer.parseInt(input.substring(j, j)) * multiplyBy[j];
+						}
+						if(CprProductSum % 11 == 0) {
+							return true;
+						} else {
+							return false;
+						}
 					}
 				}
 				return false;

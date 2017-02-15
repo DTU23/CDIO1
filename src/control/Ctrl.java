@@ -7,66 +7,48 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import model.IDataStorage;
-import model.JSONStorage;
 import model.UserDAO;
 import model.UserDTO;
 
 public class Ctrl {
+    UserDAO dao;
 
-    public Ctrl(UserDAO dao){
-        this.dataPersistence = new JSONStorage(System.getProperty("user.dir")+"/src/model/data.json");
-        this.users = dataPersistence.read();
+    public Ctrl(UserDAO dao_const){
+        this.dao = dao_const;
     }
 
-    public UserDTO getUser(HashMap<String, Object> hashMap){
-        for (int i = 0; i < this.users.size(); i++){
-            if(this.users.get(i).getUserID() == Integer.parseInt(hashMap.get("ID").toString())){
-                return this.users.get(i);
-            }
-        }
-        return null;
+    public UserDTO getUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+        return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
-    public ArrayList<UserDTO> getUserList(){
-        return this.users;
+    public ArrayList<UserDTO> getUserList()throws IDataStorage.DALException{
+        return dao.getUserList();
     }
 
-    public String createUser(HashMap<String, Object> hashMap){
+    public String createUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
         try {
-            UserDTO user = new UserDTO(hashMap);
-            this.users.add(user);
-            this.save();
-            return user.getPassword();
+            this.dao.createUser(new UserDTO(hashMap));
+            return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString())).getPassword();
         }catch (UserDTO.DTOException e){
             e.printStackTrace();
         }
         return null;
     }
 
-    public boolean updateUser(HashMap<String, Object> hashMap){
-        users.remove(getUser(hashMap));
-        try {
-            users.add(new UserDTO(hashMap));
-            return true;
+    public void updateUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+        try{
+            this.dao.updateUser(new UserDTO(hashMap));
         }catch (UserDTO.DTOException e){
-            e.printStackTrace();
-            return false;
+            throw new IDataStorage.DALException(e.getMessage());
         }
     }
 
-    public boolean deleteUser(HashMap<String, Object> hashMap){
-        for (int i = 0; i < this.users.size(); i++){
-            if(this.users.get(i).getUserID() == Integer.parseInt(hashMap.get("ID").toString())){
-                this.users.remove(i);
-                this.save();
-                return true;
-            }
-        }
-        return false;
+    public void deleteUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+        this.dao.deleteUser(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
-    public boolean editUser(HashMap<String, Object> hashMap){
-        UserDTO user = this.getUser(hashMap);
+    public boolean editUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+        UserDTO user = this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
         if (user == null){
             return false;
         }else{
@@ -82,20 +64,16 @@ public class Ctrl {
             if(hashMap.containsKey("ID")){
                 user.setUserID(Integer.parseInt(hashMap.get("ID").toString()));
             }
+            this.dao.updateUser(user);
             return true;
         }
     }
 
-    public boolean exists(HashMap<String, Object> hashMap){
-        for (UserDTO user: users) {
-            if(user.getUserID() == Integer.parseInt(hashMap.get("ID").toString())){
-                return true;
-            }
-        }
-        return false;
+    public boolean exists(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+        return this.dao.userExists(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
-    public String changePassword(){
+    public String changePassword()throws IDataStorage.DALException{
         return generatePassword(10);
     }
 
@@ -105,7 +83,7 @@ public class Ctrl {
      * @param length
      * @return
      */
-    private String generatePassword(int length) {
+    private String generatePassword(int length)throws IDataStorage.DALException {
         String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String characters = "abcdefghijklmnopqrstuvwxyz";
         String numbers = "0123456789";
@@ -122,13 +100,9 @@ public class Ctrl {
         return new String(password);
     }
 
-    private boolean validatePassword(String password, HashMap<String, Object> hashMap) {
+    private boolean validatePassword(String password, HashMap<String, Object> hashMap)throws IDataStorage.DALException {
         Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?!.*" + hashMap.get("userName").toString() + ")(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
         Matcher m = p.matcher(password);
         return m.matches();
-    }
-
-    private void save(){
-        dataPersistence.write(this.users);
     }
 }

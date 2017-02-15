@@ -5,15 +5,15 @@ import java.util.HashMap;
 
 import model.IDataStorage;
 import model.JSONStorage;
+import model.UserDAO;
 import model.UserDTO;
 
 public class Ctrl {
-    private final IDataStorage dataPersistence;
-    private final ArrayList<UserDTO> users;
 
-    public Ctrl(){
-        this.dataPersistence = new JSONStorage(System.getProperty("user.dir")+"/src/model/data.json");
-        this.users = dataPersistence.read();
+    private UserDAO userDAO;
+
+    public Ctrl(UserDAO userDAO){
+        this.userDAO = userDAO;
     }
 
     public UserDTO getUser(HashMap<String, Object> hashMap){

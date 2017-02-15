@@ -1,35 +1,57 @@
 package model;
 
-import java.util.HashMap;
-import java.util.List;
-
+import java.util.ArrayList;
 import model.IDataStorage.DALException;
 
 public class UserDAO {
 
-	public UserDTO getUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
+	private IDataStorage storage;
+	private ArrayList<UserDTO> users;
+
+	public UserDAO(IDataStorage storage) {
+		this.storage = storage;
+		users = this.storage.read();
+	}
+
+	public UserDTO getUser(int userId) throws DALException {
+		for (UserDTO user : users) {
+			if (user.getUserID() == userId) {
+				return user;
+			}
+		}
 		return null;
 	}
 
-	public List<UserDTO> getUserList() throws DALException {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<UserDTO> getUserList() throws DALException {
+		return users;
 	}
 
-	public String createUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
-		return null;
+	public void createUser(UserDTO user) throws DALException {
+		users.add(user);
 	}
 
-	public boolean updateUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
-		return false;
+	public void updateUser(UserDTO user) throws DALException {
+		UserDTO temp = user; //TODO Is this an unecessary temp?
+		deleteUser(user.getUserID());
+		createUser(temp);
 	}
 
-	public boolean deleteUser(HashMap<String, Object> hashMap) throws DALException {
-		// TODO Auto-generated method stub
+	public void deleteUser(int userId) throws DALException {
+		for (UserDTO user : users) {
+			if (user.getUserID() == userId) {
+				users.remove(user);
+			}
+		}
+	}
+
+	public boolean userExists(int userId) throws DALException {
+		for (UserDTO user : users) {
+			if (user.getUserID() == userId) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 }
+

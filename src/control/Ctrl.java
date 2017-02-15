@@ -12,8 +12,6 @@ import model.UserDAO;
 import model.UserDTO;
 
 public class Ctrl {
-    private final IDataStorage dataPersistence;
-    private final ArrayList<UserDTO> users;
 
     public Ctrl(UserDAO dao){
         this.dataPersistence = new JSONStorage(System.getProperty("user.dir")+"/src/model/data.json");

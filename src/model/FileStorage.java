@@ -12,6 +12,10 @@ public class FileStorage implements IDataStorage {
     }
     public FileStorage(String path) {
         this.path = path;
+
+        if(!fileExists()) {
+            createFile();
+        }
     }
 
     @Override
@@ -48,7 +52,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public ArrayList<UserDTO> read() throws DALException{
+    public ArrayList<UserDTO> read() throws DALException {
         ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
         FileInputStream fIS = null;
         ObjectInputStream oIS = null;

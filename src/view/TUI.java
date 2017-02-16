@@ -112,77 +112,85 @@ public class TUI implements UI {
     }
 
     private void editUser() {
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        String input;
-        // gets user to edit
-        input = getExistingID("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.", hashMap);
+        if(!controller.userListEmpty()) {
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            String input;
+            // gets user to edit
+            input = getExistingID("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.", hashMap);
 
-        if (!input.equals("cancel")) {
-            loop:
-            while (true) {
-                // gets input
-                String choice = getInput("Please choose what you want to edit.\n"
-                        + "The available commands are:\n"
-                        + "name - lets you change the user name.\n"
-                        + "ini - lets you change the initials.\n"
-                        + "password - gives you a new password.\n"
-                        + "role - lets you change the role\n"
-                        + "cancel - takes you to main menu.").toLowerCase();
-                // divides the flow
-                switch (choice) {
-                    case "name":
-                        getName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
-                        break loop;
-                    case "ini":
-                        getIni("Choose initials between 2 and 4 characters, or type cancel to go to main menu.", hashMap);
-                        break loop;
-                    case "cpr":
-                        getCpr("Type new social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
-                        break loop;
-                    case "password":
-                        changePassword("");
-                        //TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
-                        break loop;
-                    case "role":
-                        getRoles("Choose roles from admin, pharmacist, foreman or operater, type done to finish adding roles " +
-                                "or type cancel to go to main menu. You must add atleast one role.", hashMap);
-                        break loop;
-                    case "cancel":
-                        break loop;
-                    default:
-                        System.out.println("Invalid command.");
-                        break;
+            if (!input.equals("cancel")) {
+                loop:
+                while (true) {
+                    // gets input
+                    String choice = getInput("Please choose what you want to edit.\n"
+                            + "The available commands are:\n"
+                            + "name - lets you change the user name.\n"
+                            + "ini - lets you change the initials.\n"
+                            + "password - gives you a new password.\n"
+                            + "role - lets you change the role\n"
+                            + "cancel - takes you to main menu.").toLowerCase();
+                    // divides the flow
+                    switch (choice) {
+                        case "name":
+                            getName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
+                            break loop;
+                        case "ini":
+                            getIni("Choose initials between 2 and 4 characters, or type cancel to go to main menu.", hashMap);
+                            break loop;
+                        case "cpr":
+                            getCpr("Type new social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
+                            break loop;
+                        case "password":
+                            changePassword("");
+                            //TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
+                            break loop;
+                        case "role":
+                            getRoles("Choose roles from admin, pharmacist, foreman or operater, type done to finish adding roles " +
+                                    "or type cancel to go to main menu. You must add atleast one role.", hashMap);
+                            break loop;
+                        case "cancel":
+                            break loop;
+                        default:
+                            System.out.println("Invalid command.");
+                            break;
+                    }
+                }
+                try {
+                    controller.editUser(hashMap);
+                } catch (Exception e) {
+
                 }
             }
-            try {
-                controller.editUser(hashMap);
-            } catch (Exception e) {
-
-            }
+        } else {
+            System.out.println("The user list is empty.");
         }
     }
 
     private void delete() {
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        String input;
-        // gets user to delete
-        input = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
+        if(!controller.userListEmpty()) {
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            String input;
+            // gets user to delete
+            input = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
 
-        // confirmation
-        do {
-            input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
-                    + "Type confirm or cancel.");
-            if (!input.equals("confirm") || !input.equals("cancel")) {
-                System.out.println("Invalid command.");
-            }
-        } while (!input.equals("confirm") || !input.equals("cancel"));
-        // executes if confirmed
-        if (input.equals("confirm")) {
-            try {
-                controller.deleteUser(hashMap);
-            } catch (Exception e) {
+            // confirmation
+            do {
+                input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
+                        + "Type confirm or cancel.");
+                if (!input.equals("confirm") || !input.equals("cancel")) {
+                    System.out.println("Invalid command.");
+                }
+            } while (!input.equals("confirm") || !input.equals("cancel"));
+            // executes if confirmed
+            if (input.equals("confirm")) {
+                try {
+                    controller.deleteUser(hashMap);
+                } catch (Exception e) {
 
+                }
             }
+        } else {
+            System.out.println("The user list is empty.");
         }
     }
 

@@ -88,7 +88,8 @@ public class TUI implements UI {
 
         // gets role
         if (!input.equals("cancel")) {
-            input = getRoles("Choose a role from Admin, Pharmacist, Foreman or Operator, or type cancel to go to main menu.", hashMap);
+            input = getRoles("Choose roles from admin, pharmacist, foreman or operator, type done to finish adding roles " +
+                    "or type cancel to go to main menu. You must add at least one role.", hashMap);
         }
 
         if (!input.equals("cancel")) {
@@ -145,8 +146,8 @@ public class TUI implements UI {
                             //TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
                             break loop;
                         case "role":
-                            getRoles("Choose roles from admin, pharmacist, foreman or operater, type done to finish adding roles " +
-                                    "or type cancel to go to main menu. You must add atleast one role.", hashMap);
+                            getRoles("Choose roles from admin, pharmacist, foreman or operator, type done to finish adding roles " +
+                                    "or type cancel to go to main menu. You must add at least one role.", hashMap);
                             break loop;
                         case "cancel":
                             break loop;
@@ -327,6 +328,9 @@ public class TUI implements UI {
                 } else {
                     System.out.println("Role already chosen.");
                 }
+            }
+            if(input.equals("done") && chosenRoles.isEmpty()) {
+                continue;
             }
         } while (!input.equals("done") && !input.equals("cancel"));
         // executes if user didn't type cancel

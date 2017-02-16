@@ -10,6 +10,7 @@ public class UserDAO {
 
 	public UserDAO(IDataStorage storage) {
 		this.storage = storage;
+		users = new ArrayList<UserDTO>();
 	}
 
 	public UserDTO getUser(int userId) throws DALException {
@@ -24,6 +25,10 @@ public class UserDAO {
 	public ArrayList<UserDTO> getUserList() {
 		return users;
 	}
+	
+	public boolean isUserListEmpty(){
+        return users.isEmpty();
+    }
 
 	public void createUser(UserDTO user) throws DALException {
 		users.add(user);

@@ -8,15 +8,10 @@ import view.TUI;
 public class Main{
 	
     public static void main(String[] args){
-        try{
-            IDataStorage storage = new FileStorage();
-            UserDAO dao = new UserDAO(storage);
-            Ctrl controller = new Ctrl(dao);
-            TUI tui = new TUI(controller);
-            tui.run();
-        }catch (IDataStorage.DALException e){
-            e.printStackTrace();
-            System.exit(1);
-        }
+        IDataStorage storage = new FileStorage();
+        UserDAO dao = new UserDAO(storage);
+        Ctrl controller = new Ctrl(dao);
+        TUI tui = new TUI(controller);
+        tui.run();
     }
 }

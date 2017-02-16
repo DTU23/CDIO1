@@ -20,6 +20,11 @@ public class TUI implements UI {
 
     @Override
     public void run() {
+        try {
+            controller.initStorage();
+        } catch (Exception e) {
+            
+        }
         mainMenu();
     }
 

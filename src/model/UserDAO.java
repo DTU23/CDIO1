@@ -8,9 +8,8 @@ public class UserDAO {
 	private IDataStorage storage;
 	private ArrayList<UserDTO> users;
 
-	public UserDAO(IDataStorage storage) throws DALException  {
+	public UserDAO(IDataStorage storage) {
 		this.storage = storage;
-		users = this.storage.read();
 	}
 
 	public UserDTO getUser(int userId) throws DALException {
@@ -53,5 +52,8 @@ public class UserDAO {
 		return false;
 	}
 
-}
+	public void init() throws DALException {
+		users = storage.read();
+	}
 
+}

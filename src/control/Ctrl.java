@@ -21,7 +21,7 @@ public class Ctrl {
         return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
-    public ArrayList<UserDTO> getUserList()throws IDataStorage.DALException{
+    public ArrayList<UserDTO> getUserList(){
         return dao.getUserList();
     }
 
@@ -69,7 +69,7 @@ public class Ctrl {
         }
     }
 
-    public boolean exists(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+    public boolean exists(HashMap<String, Object> hashMap){
         return this.dao.userExists(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
@@ -104,5 +104,9 @@ public class Ctrl {
         Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?!.*" + hashMap.get("userName").toString() + ")(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
         Matcher m = p.matcher(password);
         return m.matches();
+    }
+
+    public void initStorage(){
+        dao.init();
     }
 }

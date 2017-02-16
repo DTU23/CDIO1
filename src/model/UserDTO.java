@@ -142,7 +142,7 @@ public class UserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "userID=" + userID + " password=" + password + " userName=" + userName + " ini=" + ini + " cpr=" + cpr + " roles=" + roles;
+        return "userID = " + userID + ", password = " + password + ", userName = " + userName + ", ini = " + ini + ", cpr = " + cpr + ", roles = " + roles;
     }
 
     public class DTOException extends Exception {

@@ -27,12 +27,14 @@ public class UserDAO {
 
 	public void createUser(UserDTO user) throws DALException {
 		users.add(user);
+		storage.write(users);
 	}
 
 	public void updateUser(UserDTO user) throws DALException {
 		UserDTO temp = user; //TODO Is this an unecessary temp?
 		deleteUser(user.getUserID());
 		createUser(temp);
+		storage.write(users);
 	}
 
 	public void deleteUser(int userId) throws DALException {
@@ -41,6 +43,7 @@ public class UserDAO {
 				users.remove(user);
 			}
 		}
+		storage.write(users);
 	}
 
 	public boolean userExists(int userId){

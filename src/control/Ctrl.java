@@ -25,6 +25,10 @@ public class Ctrl {
         return dao.getUserList();
     }
 
+    public boolean userListEmpty(){
+        return dao.getUserList() == null;
+    }
+
     public String createUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
         try {
             this.dao.createUser(new UserDTO(hashMap));

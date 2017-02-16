@@ -31,6 +31,7 @@ public class Ctrl {
 
     public String createUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
         try {
+            hashMap.put("password", this.generatePassword(10));
             this.dao.createUser(new UserDTO(hashMap));
             return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString())).getPassword();
         }catch (UserDTO.DTOException e){

@@ -207,12 +207,12 @@ public class TUI implements UI {
 
     private boolean isValidCpr(String input) {
         if (isPositiveInteger(input)) {
-            int month = Integer.parseInt(input.substring(2, 3));
+            int month = Integer.parseInt(input.substring(2, 4));
             // Checks if month is valid
             if (month > 0 && month < 13) {
                 for (int i = 1900; i < 2100; i += 100) {
-                    int day = Integer.parseInt(input.substring(0, 1));
-                    int year = Integer.parseInt(i + input.substring(4, 5));
+                    int day = Integer.parseInt(input.substring(0, 2));
+                    int year = Integer.parseInt(i + input.substring(4, 6));
                     // Creates a calendar object and sets year and month
                     Calendar mycal = new GregorianCalendar(year, month, 1);
                     // Get the number of days in that month
@@ -223,7 +223,7 @@ public class TUI implements UI {
                         int CprProductSum = 0;
                         int[] multiplyBy = {4, 3, 2, 7, 6, 5, 4, 3, 2, 1};
                         for (int j = 0; j < input.length(); j++) {
-                            CprProductSum += Integer.parseInt(input.substring(j, j)) * multiplyBy[j];
+                            CprProductSum += Integer.parseInt(input.substring(j, j+1)) * multiplyBy[j];
                         }
                         if (CprProductSum % 11 == 0) {
                             return true;

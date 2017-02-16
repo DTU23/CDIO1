@@ -8,7 +8,7 @@ public class UserDAO {
 	private IDataStorage storage;
 	private ArrayList<UserDTO> users;
 
-	public UserDAO(IDataStorage storage) {
+	public UserDAO(IDataStorage storage) throws DALException  {
 		this.storage = storage;
 		users = this.storage.read();
 	}
@@ -44,7 +44,7 @@ public class UserDAO {
 		}
 	}
 
-	public boolean userExists(int userId) throws DALException {
+	public boolean userExists(int userId){
 		for (UserDTO user : users) {
 			if (user.getUserID() == userId) {
 				return true;

@@ -73,7 +73,7 @@ public class Ctrl {
         return this.dao.userExists(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
-    public String changePassword()throws IDataStorage.DALException{
+    public String changePassword(){
         return generatePassword(10);
     }
 
@@ -83,7 +83,7 @@ public class Ctrl {
      * @param length
      * @return
      */
-    private String generatePassword(int length)throws IDataStorage.DALException {
+    private String generatePassword(int length){
         String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String characters = "abcdefghijklmnopqrstuvwxyz";
         String numbers = "0123456789";

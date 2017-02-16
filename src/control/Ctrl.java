@@ -106,7 +106,7 @@ public class Ctrl {
         return m.matches();
     }
 
-    public void initStorage(){
+    public void initStorage() throws IDataStorage.DALException {
         dao.init();
     }
 }

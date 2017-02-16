@@ -21,7 +21,7 @@ public class UserDAO {
 		return null;
 	}
 
-	public ArrayList<UserDTO> getUserList() throws DALException {
+	public ArrayList<UserDTO> getUserList() {
 		return users;
 	}
 

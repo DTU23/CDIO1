@@ -146,21 +146,6 @@ public class UserDTO implements Serializable {
         return "userID = " + userID + ", password = " + password + ", userName = " + userName + ", ini = " + ini + ", cpr = " + cpr + ", roles = " + roles;
     }
 
-    /**
-     *
-     * @param <e>
-     */
-    public static class DTOList<e> extends ArrayList<e>{
-        @Override
-        public String toString(){
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < this.size(); i++){
-                result.append(this.get(i).toString()+ "\n");
-            }
-            return result.toString().substring(0, result.toString().length()-1);
-        }
-    }
-
     public class DTOException extends Exception {
         private static final long serialVersionUID = -7237020336150973814L;
 

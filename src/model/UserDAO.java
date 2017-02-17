@@ -8,11 +8,11 @@ import model.IDataStorage.DALException;
 public class UserDAO {
 
 	private IDataStorage storage;
-	private UserDTO.DTOList<UserDTO> users;
+	private DTOList<UserDTO> users;
 
 	public UserDAO(IDataStorage storage) {
 		this.storage = storage;
-		users = new UserDTO.DTOList<UserDTO>();
+		users = new DTOList<UserDTO>();
 	}
 
 	public UserDTO getUser(int userId) throws DALException {

@@ -29,7 +29,7 @@ public class JSONStorage implements IDataStorage {
      * @return boolean Error
      */
     @Override
-    public boolean write(UserDTO.DTOList<UserDTO> users) {
+    public boolean write(DTOList<UserDTO> users) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JSONObject usersJSON = new JSONObject();
         JSONArray usersArray = new JSONArray();
@@ -66,7 +66,7 @@ public class JSONStorage implements IDataStorage {
      * @return ArrayList<UserDTO>
      */
     @Override
-    public UserDTO.DTOList<UserDTO> read() {
+    public DTOList<UserDTO> read() {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(this.filePath));
@@ -74,7 +74,7 @@ public class JSONStorage implements IDataStorage {
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray users = (JSONArray) jsonObject.get("users");
 
-            UserDTO.DTOList<UserDTO> userList = new UserDTO.DTOList<>();
+            DTOList<UserDTO> userList = new DTOList<>();
 
             for (Object user: users) {
                 JSONObject jsonUser = (JSONObject) user;

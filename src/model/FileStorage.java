@@ -19,12 +19,11 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public boolean write(ArrayList<UserDTO> users) throws DALException {
+    public boolean write(ArrayList<UserDTO> users) throws DALException, IOException {
         FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 
         try {
-
             // Serialize the collection of UserDTO's
             fOS = new FileOutputStream(path);
             oOS = new ObjectOutputStream(fOS);
@@ -33,11 +32,6 @@ public class FileStorage implements IDataStorage {
             for (UserDTO user : users) {
                 oOS.writeObject(user);
             }
-
-        } catch (FileNotFoundException e) {
-            throw new DALException("Error locating file", e);
-        } catch (IOException e) {
-            throw new DALException("Error writing to disk", e);
         } finally {
             if (oOS != null) {
                 try {
@@ -47,18 +41,16 @@ public class FileStorage implements IDataStorage {
                 }
             }
         }
-
         return true;
     }
 
     @Override
-    public ArrayList<UserDTO> read() throws DALException {
+    public ArrayList<UserDTO> read() throws DALException, IOException, ClassNotFoundException {
         ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
         FileInputStream fIS = null;
         ObjectInputStream oIS = null;
 
         try {
-
             // Deserialize the file back into the collection
             fIS = new FileInputStream(path);
             oIS = new ObjectInputStream(fIS);
@@ -76,13 +68,6 @@ public class FileStorage implements IDataStorage {
             } catch (EOFException e) {
                 // No problem - no more objects to import
             }
-
-        } catch (FileNotFoundException e) {
-            //No problem - just returning empty userstore
-        } catch (IOException e) {
-            throw new DALException("Error while reading disk!", e);
-        } catch (ClassNotFoundException e) {
-            throw new DALException("Error while reading file - Class not found!", e);
         } finally {
             if (oIS != null){
                 try {
@@ -92,22 +77,21 @@ public class FileStorage implements IDataStorage {
                 }
             }
         }
-
         return userList;
     }
 
     public boolean fileExists() {
-		return new File(path).exists();
-	}
+        return new File(path).exists();
+    }
 
-	public void createFile() {
-		try{
-			PrintWriter writer = new PrintWriter(path, "UTF-8");
-			writer.println("");
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public void createFile() {
+        try{
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
+            writer.println("");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

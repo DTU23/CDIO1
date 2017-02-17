@@ -1,5 +1,6 @@
 package control;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -29,18 +30,18 @@ public class Ctrl {
         return dao.isUserListEmpty();
     }
 
-    public String createUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+    public String createUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException, IOException {
         try {
             hashMap.put("password", this.generatePassword(10));
             this.dao.createUser(new UserDTO(hashMap));
             return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString())).getPassword();
-        }catch (UserDTO.DTOException e){
+        } catch (UserDTO.DTOException e){
             e.printStackTrace();
         }
         return null;
     }
 
-    public void updateUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+    public void updateUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException, IOException{
         try{
             this.dao.updateUser(new UserDTO(hashMap));
         }catch (UserDTO.DTOException e){
@@ -48,11 +49,11 @@ public class Ctrl {
         }
     }
 
-    public void deleteUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+    public void deleteUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, IOException {
         this.dao.deleteUser(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
-    public boolean editUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+    public boolean editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, IOException {
         UserDTO user = this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
         if (user == null){
             return false;
@@ -111,7 +112,7 @@ public class Ctrl {
         return m.matches();
     }
 
-    public void initStorage() throws IDataStorage.DALException {
+    public void initStorage() throws IDataStorage.DALException, IOException, ClassNotFoundException {
         dao.init();
     }
 }

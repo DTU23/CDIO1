@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 4545864587995944260L;
@@ -142,7 +143,16 @@ public class UserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "userID = " + userID + ", password = " + password + ", userName = " + userName + ", ini = " + ini + ", cpr = " + cpr + ", roles = " + roles;
+        return "\nuserID = " + userID + ", password = " + password + ", userName = " + userName + ", ini = " + ini + ", cpr = " + cpr + ", roles = " + listToString(roles);
+    }
+
+    private static String listToString(List<?> list) {
+        String result = "[";
+        for (int i = 0; i+1 < list.size(); i++) {
+            result += list.get(i)+ ", ";
+        }
+        result += list.get(list.size()-1)+"]";
+        return result;
     }
 
     public class DTOException extends Exception {

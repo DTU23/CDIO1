@@ -97,11 +97,11 @@ public class Ctrl {
         Random rnd = new Random();
         char[] password = new char[length];
 
-        /*do {
+        //do {
             for (int i = 0; i < length; i++) {
                 password[i] = passwordCharacters.charAt(rnd.nextInt(passwordCharacters.length()));
             }
-        }while (!this.validatePassword(new String(password), hashMap));*/
+        //}while (!this.validatePassword(new String(password), hashMap));*/
         return new String(password);
     }
 

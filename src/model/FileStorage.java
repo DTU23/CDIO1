@@ -19,7 +19,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public boolean write(ArrayList<UserDTO> users) throws DALException {
+    public boolean write(UserDTO.DTOList<UserDTO> users) throws DALException {
         FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 
@@ -52,8 +52,8 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public ArrayList<UserDTO> read() throws DALException {
-        ArrayList<UserDTO> userList = new ArrayList<UserDTO>();
+    public UserDTO.DTOList<UserDTO> read() throws DALException {
+        UserDTO.DTOList<UserDTO> userList = new UserDTO.DTOList<>();
         FileInputStream fIS = null;
         ObjectInputStream oIS = null;
 

@@ -32,7 +32,10 @@ public class FileStorage implements IDataStorage {
             for (UserDTO user : users) {
                 oOS.writeObject(user);
             }
-        } finally {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
             if (oOS != null) {
                 try {
                     oOS.close();
@@ -65,10 +68,13 @@ public class FileStorage implements IDataStorage {
                         throw new DALException("Wrong object in file");
                     }
                 }
-            } catch (EOFException e) {
+            } catch (Exception e) {
                 // No problem - no more objects to import
             }
-        } finally {
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
             if (oIS != null){
                 try {
                     oIS.close();

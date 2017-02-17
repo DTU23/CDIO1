@@ -143,7 +143,22 @@ public class UserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "\nuserID = " + userID + ", password = " + password + ", userName = " + userName + ", ini = " + ini + ", cpr = " + cpr + ", roles = " + listToString(roles);
+        return "userID = " + userID + ", password = " + password + ", userName = " + userName + ", ini = " + ini + ", cpr = " + cpr + ", roles = " + listToString(roles);
+    }
+
+    /**
+     * 
+     * @param <e>
+     */
+    public static class DTOList<e> extends ArrayList<e>{
+        @Override
+        public String toString(){
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i+1 < this.size(); i++){
+                result.append(this.get(i).toString()+ "\n");
+            }
+            return result.toString().substring(0, result.toString().length()-1);
+        }
     }
 
     private static String listToString(List<?> list) {

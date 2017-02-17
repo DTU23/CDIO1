@@ -207,7 +207,7 @@ public class TUI implements UI {
 
 	private boolean isPositiveInteger(String input) {
 		try {
-			int i = Integer.parseInt(input);
+			long i = Long.parseLong(input);
 			if (i >= 0) {
 				return true;
 			} else {

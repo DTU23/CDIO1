@@ -19,7 +19,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public boolean write(ArrayList<UserDTO> users) throws DALException, FileNotFoundException, IOException {
+    public boolean write(ArrayList<UserDTO> users) throws DALException, IOException {
         FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 

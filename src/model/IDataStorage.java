@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -11,14 +13,14 @@ public interface IDataStorage {
      * @param users
      * @return boolean Error
      */
-    boolean write(ArrayList<UserDTO> users) throws DALException;
+    boolean write(ArrayList<UserDTO> users) throws DALException, IOException;
     //TODO lav noget exception throwing handling i stedet for boolean return
 
     /**
      * Reads data input to memory
      * @return ArrayList<UserDTO>
      */
-    ArrayList<UserDTO> read() throws DALException;
+    ArrayList<UserDTO> read() throws DALException, IOException, ClassNotFoundException;
     
   	public class DALException extends Exception {
   		

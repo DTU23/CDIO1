@@ -174,17 +174,18 @@ public class TUI implements UI {
 		if(!controller.isUserListEmpty()) {
 			HashMap<String, Object> hashMap = new HashMap<String, Object>();
 			String input;
+			String ID;
 			// gets user to delete
-			input = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
+			ID = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
 
 			// confirmation
 			do {
-				input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(input) + "?\n"
+				input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(ID) + "?\n"
 						+ "Type confirm or cancel.");
-				if (!input.equals("confirm") || !input.equals("cancel")) {
+				if (!input.equals("confirm") && !input.equals("cancel")) {
 					System.out.println("Invalid command.");
 				}
-			} while (!input.equals("confirm") || !input.equals("cancel"));
+			} while (!input.equals("confirm") && !input.equals("cancel"));
 			// executes if confirmed
 			if (input.equals("confirm")) {
 				try {

@@ -11,25 +11,50 @@ import model.IDataStorage;
 import model.UserDAO;
 import model.UserDTO;
 
+/**
+ *
+ */
 public class Ctrl {
     UserDAO dao;
+
 
     public Ctrl(UserDAO dao_const){
         this.dao = dao_const;
     }
 
+    /**
+     * Returns user object from hashmap-key ID
+     * @param hashMap
+     * @return
+     * @throws IDataStorage.DALException
+     */
     public UserDTO getUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
         return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
+    /**
+     * Gets all users from DAO
+     * @return
+     */
     public ArrayList<UserDTO> getUserList(){
         return dao.getUserList();
     }
 
+    /**
+     * Checks if any users exist
+     * @return
+     */
     public boolean isUserListEmpty(){
         return dao.isUserListEmpty();
     }
 
+    /**
+     * Creates new user
+     * @param hashMap
+     * @return
+     * @throws IDataStorage.DALException
+     * @throws IOException
+     */
     public String createUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException, IOException {
         try {
             hashMap.put("password", this.generatePassword(10));
@@ -41,18 +66,23 @@ public class Ctrl {
         return null;
     }
 
-    public void updateUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException, IOException{
-        try{
-            this.dao.updateUser(new UserDTO(hashMap));
-        }catch (UserDTO.DTOException e){
-            throw new IDataStorage.DALException(e.getMessage());
-        }
-    }
-
+    /**
+     * Deletes a user from the data persistence
+     * @param hashMap
+     * @throws IDataStorage.DALException
+     * @throws IOException
+     */
     public void deleteUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, IOException {
         this.dao.deleteUser(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
+    /**
+     * Edits a user. Takes ID for user being edited and a hashmap for which key to update.
+     * @param hashMap
+     * @throws IDataStorage.DALException
+     * @throws UserDTO.DTOException
+     * @throws IOException
+     */
     public void editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, UserDTO.DTOException, IOException {
         UserDTO user = this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
         if(hashMap.containsKey("cpr")){
@@ -76,19 +106,28 @@ public class Ctrl {
         this.dao.updateUser(user);
     }
 
+    /**
+     * Checks if user exists
+     * @param hashMap
+     * @return
+     */
     public boolean exists(HashMap<String, Object> hashMap){
         return this.dao.userExists(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
+    /**
+     * TODO : Passthrough for generatePassword. Eventually user is allowed to choose passwords
+     * @return
+     */
     public String changePassword(){
         return generatePassword(10);
     }
 
 
     /**
-     * Generates a valid password for current user
-     * @param length
-     * @return
+     * Generates a random password with listed characters and symbols
+     * @param length how many characters should the password be
+     * @return String
      */
     private String generatePassword(int length){
         String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -107,12 +146,29 @@ public class Ctrl {
         return new String(password);
     }
 
+    /**
+     * Method can validate if a chosen password is allowed or not, based on the following requirements:
+     * minimum 2 symbols
+     * minimum 2 uppcase characters
+     * minimum 2 lower case characters
+     * username not present in password string
+     * @param password
+     * @param hashMap
+     * @return
+     * @throws IDataStorage.DALException
+     */
     private boolean validatePassword(String password, HashMap<String, Object> hashMap)throws IDataStorage.DALException {
         Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?!.*" + hashMap.get("userName").toString() + ")(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
         Matcher m = p.matcher(password);
         return m.matches();
     }
 
+    /**
+     * Initializes datapersistence/DAO.
+     * @throws IDataStorage.DALException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void initStorage() throws IDataStorage.DALException, IOException, ClassNotFoundException {
         this.dao.init();
     }

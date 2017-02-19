@@ -53,29 +53,9 @@ public class Ctrl {
         this.dao.deleteUser(Integer.parseInt(hashMap.get("ID").toString()));
     }
 
-    public boolean editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, IOException {
-        UserDTO user = this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
-        if (user == null){
-            return false;
-        }else{
-            if (hashMap.containsKey("userName")) {
-                user.setUserName(hashMap.get("userName").toString());
-            }
-            if (hashMap.containsKey("cpr")){
-                user.setCpr(hashMap.get("cpr").toString());
-            }
-            if (hashMap.containsKey("ini")){
-                user.setIni(hashMap.get("ini").toString());
-            }
-            if (hashMap.containsKey("password")){
-                user.setPassword(hashMap.get("password").toString());
-            }
-            if(hashMap.containsKey("ID")){
-                user.setUserID(Integer.parseInt(hashMap.get("ID").toString()));
-            }
-            this.dao.updateUser(user);
-            return true;
-        }
+    public void editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, UserDTO.DTOException, IOException {
+        UserDTO user = new UserDTO(hashMap);
+        this.dao.updateUser(user);
     }
 
     public boolean exists(HashMap<String, Object> hashMap){
@@ -105,7 +85,7 @@ public class Ctrl {
             for (int i = 0; i < length; i++) {
                 password[i] = passwordCharacters.charAt(rnd.nextInt(passwordCharacters.length()));
             }
-        //}while (!this.validatePassword(new String(password), hashMap));*/
+        //}while (!this.validatePassword(new String(password), hashMap));
         return new String(password);
     }
 
@@ -116,6 +96,6 @@ public class Ctrl {
     }
 
     public void initStorage() throws IDataStorage.DALException, IOException, ClassNotFoundException {
-        dao.init();
+        this.dao.init();
     }
 }

@@ -304,8 +304,8 @@ public class TUI implements UI {
 		String input;
 		do {
 			input = getInput(message);
-			hashMap.put("ID", input);
 			if (isPositiveInteger(input)) {
+				hashMap.put("ID", Integer.parseInt(input));
 				if (!controller.exists(hashMap)) {
 					System.out.println("User doesn't exist!");
 				}
@@ -319,9 +319,9 @@ public class TUI implements UI {
 		int ID = 0;
 		do {
 			input = getInput(message);
-			dataMap.put("ID", input);
 			if (isPositiveInteger(input)) {
 				ID = Integer.parseInt(input);
+				dataMap.put("ID", ID);
 			}
 		} while ((ID < 11 || ID > 99) && !input.equals("cancel"));
 		return input;

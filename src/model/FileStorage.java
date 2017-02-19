@@ -8,15 +8,11 @@ public class FileStorage implements IDataStorage {
 
     private String path;
 
-    public FileStorage(){
+    public FileStorage() {
         this(System.getProperty("user.dir")+"/src/model/data.txt");
     }
     public FileStorage(String path) {
         this.path = path;
-
-        if(!fileExists()) {
-            createFile();
-        }
     }
 
     @Override
@@ -34,7 +30,7 @@ public class FileStorage implements IDataStorage {
                 oOS.writeObject(user);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new DALException("Unable to write to file", e);
         }
         finally {
             if (oOS != null) {
@@ -50,6 +46,10 @@ public class FileStorage implements IDataStorage {
 
     @Override
     public DTOList<UserDTO> read() throws DALException {
+        if(!fileExists()) {
+            createFile();
+        }
+
         DTOList<UserDTO> userList = new DTOList<>();
         FileInputStream fIS = null;
         ObjectInputStream oIS = null;
@@ -73,9 +73,8 @@ public class FileStorage implements IDataStorage {
                 // No problem - no more objects to import
             }
         } catch (Exception e){
-            e.printStackTrace();
-        }
-        finally {
+            throw new DALException("Unable to read file", e);
+        } finally {
             if (oIS != null){
                 try {
                     oIS.close();
@@ -91,13 +90,21 @@ public class FileStorage implements IDataStorage {
         return new File(path).exists();
     }
 
-    public void createFile() {
+    public void createFile() throws DALException {
+        PrintWriter writer = null;
         try{
-            PrintWriter writer = new PrintWriter(path, "UTF-8");
+            writer = new PrintWriter(path, "UTF-8");
             writer.println("");
-            writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DALException("Unable to create file", e);
+        } finally {
+            if(writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e) {
+                    throw new DALException("Unable to close writer", e);
+                }
+            }
         }
     }
 

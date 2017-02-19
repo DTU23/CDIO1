@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.management.relation.RoleStatus;
-
 import model.IDataStorage;
 import model.UserDAO;
 import model.UserDTO;

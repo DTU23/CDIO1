@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import control.Ctrl;
 
@@ -94,9 +97,10 @@ public class TUI implements UI {
 		}
 
 		if (!input.equals("cancel")) {
+			password = getPassword("", hashMap);
 			try {
 				// execute in logic
-				password = controller.createUser(hashMap);
+				controller.createUser(hashMap);
 				// prints ID and generated password
 				System.out.println("Your ID is: " + hashMap.get("ID") + ", and your password is: " + password);
 			} catch (Exception e) {
@@ -144,7 +148,7 @@ public class TUI implements UI {
 							getCpr("Type new social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
 							break loop;
 						case "password":
-							changePassword("");
+							getPassword("", hashMap);
 							//TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
 							break loop;
 						case "role":
@@ -259,6 +263,43 @@ public class TUI implements UI {
 		}
 	}
 
+	/**
+	 * Generates a random password with listed characters and symbols
+	 * @param length how many characters should the password be
+	 * @return String
+	 */
+	public String generatePassword(int length){
+		String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String characters = "abcdefghijklmnopqrstuvwxyz";
+		String numbers = "0123456789";
+		String symbols = "!@#$&*";
+		String passwordCharacters = charactersCaps + characters + numbers + symbols;
+		Random rnd = new Random();
+		char[] password = new char[length];
+
+		//do {
+		for (int i = 0; i < length; i++) {
+			password[i] = passwordCharacters.charAt(rnd.nextInt(passwordCharacters.length()));
+		}
+		//}while (!this.validatePassword(new String(password), hashMap));
+		return new String(password);
+	}
+
+	/**
+	 * Method can validate if a chosen password is allowed or not, based on the following requirements:
+	 * minimum 2 symbols
+	 * minimum 2 upper case characters
+	 * minimum 2 lower case characters
+	 * (username not present in password string)
+	 * @param password
+	 * @return
+	 */
+	private boolean isValidPassword(String password) {
+		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?!.*" +/* hashMap.get("userName").toString() +*/ ")(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
+		Matcher m = p.matcher(password);
+		return m.matches();
+	}
+
 	private String getExistingID(String message, HashMap<String, Object> hashMap) {
 		String input;
 		do {
@@ -315,8 +356,13 @@ public class TUI implements UI {
 		return input;
 	}
 
-	private void changePassword(String message) {
-		System.out.println(controller.changePassword());
+	private String getPassword(String message, HashMap<String, Object> dataMap) {
+		String input;
+		do {
+			input = generatePassword(10);
+			dataMap.put("password", input);
+		} while(!isValidPassword(input) && !input.equals("cancel"));
+		return input;
 		//TODO besked m.m skal implementeres her hvis bruger skal vælge nyt kodeord
 	}
 

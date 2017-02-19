@@ -16,7 +16,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public boolean write(DTOList<UserDTO> users) throws DALException {
+    public boolean write(ArrayList<UserDTO> users) throws DALException {
         FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 
@@ -45,7 +45,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public DTOList<UserDTO> read() throws DALException {
+    public ArrayList<UserDTO> read() throws DALException {
         if(!fileExists()) {
             createFile();
         }

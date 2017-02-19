@@ -97,6 +97,9 @@ public class Ctrl {
         if(hashMap.containsKey("userName")){
             user.setUserName(hashMap.get("userName").toString());
         }
+        if (hashMap.containsKey("password")){
+            user.setPassword(hashMap.get("password").toString());
+        }
         if(hashMap.containsKey("roles")){
             user.setRoles(new ArrayList<String>());
             for (String role: (ArrayList<String>)hashMap.get("roles")) {

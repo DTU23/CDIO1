@@ -1,99 +1,78 @@
-package view;
+package integration_test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import control.Ctrl;
+import control.Ctrl;	
 
-public class TUI implements UI {
+public class TUITestDriver {
 
 	private Ctrl controller;
-	private Scanner scanner;
 
-	public TUI(Ctrl controller) {
+	public TUITestDriver(Ctrl controller) {
 		this.controller = controller;
-		scanner = new Scanner(System.in);
 	}
 
-	@Override
-	public void run() {
-		try {
-			controller.initStorage();
-		} catch (Exception e) {
-			e.printStackTrace();
-			//TODO håndtering?
-		}
-		mainMenu();
-	}
-
-	public void mainMenu() {
+	public String mainMenu(String... commands) {
+		String output = null;
 		program:
 			while (true) {
 				// gets input
-				String choice = getInput("You are in the main menu, please choose what you want to do.\n"
-						+ "The available commands are:\n"
-						+ "create - creates a new user, ID and password is auto generated.\n"
-						+ "list - prints a list of all the current users.\n"
-						+ "edit - lets you edit current users.\n"
-						+ "delete - deletes a user by ID.\n"
-						+ "exit - terminates the program.").toLowerCase();
+				String choice = commands[0].toLowerCase();
 				// divides the flow
 				switch (choice) {
 				case "create":
-					createUser();
+					output = createUser(commands);
 					break;
 				case "list":
-					listUsers();
+					output = listUsers();
 					break;
 				case "edit":
-					editUser();
+					output = editUser(commands);
 					break;
 				case "delete":
-					delete();
+					output = delete(commands);
 					break;
 				case "exit":
 					break program;
 				default:
-					System.out.println("Invalid command.");
-					break;
+					return "Invalid command.";
 				}
 			}
-	scanner.close();
+		return output;
 	}
 
-	private void createUser() {
+	private String createUser(String[] commands) {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String input;
 		String password;
 
 		// gets ID
-		input = getValidID("Choose an ID between 11 and 99, or type cancel to go to main menu.", hashMap);
+		input = getValidID(commands[1], hashMap);
 
 		// gets user name
 		if (!input.equals("cancel")) {
-			input = getName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
+			input = getName(commands[2], hashMap);
 		}
 
 		// gets initials
 		if (!input.equals("cancel")) {
-			input = getIni("Choose initials between 2 and 4 characters, or type cancel to go to main menu.", hashMap);
+			input = getIni(commands[3], hashMap);
 		}
 
 		// gets social security number
 		if (!input.equals("cancel")) {
-			input = getCpr("Type your social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
+			input = getCpr(commands[4], hashMap);
 		}
 
 		// gets role
 		if (!input.equals("cancel")) {
-			input = getRoles("Choose roles from admin, pharmacist, foreman or operator, type done to finish adding roles " +
-					"or type cancel to go to main menu. You must add at least one role.", hashMap);
+			input = getRoles(commands, 5, hashMap);
 		}
 
 		if (!input.equals("cancel")) {
@@ -102,50 +81,44 @@ public class TUI implements UI {
 				// execute in logic
 				controller.createUser(hashMap);
 				// prints ID and generated password
-				System.out.println("Your ID is: " + hashMap.get("ID") + ", and your password is: " + password);
+				return "Your ID is: " + hashMap.get("ID") + ", and your password is: " + password;
 			} catch (Exception e) {
 				e.printStackTrace();
-				//TODO håndtering?
 			}
 		}
+		return null;
 	}
 
-	private void listUsers() {
+	private String listUsers() {
 		if(controller.isUserListEmpty()) {
-			System.out.println("There are no users in the system.");
+			return "There are no users in the system.";
 		} else {
-			System.out.println(controller.getUserList());
+			return controller.getUserList().toString();
 		}
 	}
 
-	private void editUser() {
+	private String editUser(String[] commands) {
 		if(!controller.isUserListEmpty()) {
 			HashMap<String, Object> hashMap = new HashMap<String, Object>();
 			String input;
 			// gets user to edit
-			input = getExistingID("Please choose which user you want to edit by typing the ID, or type cancel to go to main menu.", hashMap);
+			input = getExistingID(commands[1], hashMap);
 
 			if (!input.equals("cancel")) {
 				loop:
 					while (true) {
 						// gets input
-						String choice = getInput("Please choose what you want to edit.\n"
-								+ "The available commands are:\n"
-								+ "name - lets you change the user name.\n"
-								+ "ini - lets you change the initials.\n"
-								+ "password - gives you a new password.\n"
-								+ "roles - lets you change the roles\n"
-								+ "cancel - takes you to main menu.").toLowerCase();
+						String choice = commands[2].toLowerCase();
 						// divides the flow
 						switch (choice) {
 						case "name":
-							getName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
+							getName(commands[3], hashMap);
 							break loop;
 						case "ini":
-							getIni("Choose initials between 2 and 4 characters, or type cancel to go to main menu.", hashMap);
+							getIni(commands[3], hashMap);
 							break loop;
 						case "cpr":
-							getCpr("Type new social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
+							getCpr(commands[3], hashMap);
 							break loop;
 						case "password":
 							getPassword("", hashMap);
@@ -153,44 +126,41 @@ public class TUI implements UI {
 							break loop;
 						case "role":
 							// TODO evt. to forskellige flows her, en der tilføjer og en der fjerner
-							getRoles("Choose roles from admin, pharmacist, foreman or operator, type done to finish adding roles " +
-									"or type cancel to go to main menu. You must add at least one role.", hashMap);
+							getRoles(commands, 3, hashMap);
 							break loop;
 						case "cancel":
 							break loop;
 						default:
-							System.out.println("Invalid command.");
-							break;
+							return "Invalid command.";
 						}
 					}
 			try {
 				controller.editUser(hashMap);
 			} catch (Exception e) {
 				e.printStackTrace();
-				//TODO håndtering?
 			}
 			}
 		} else {
-			System.out.println("The user list is empty.");
+			return "The user list is empty.";
 		}
+		return null;
 	}
 
-	private void delete() {
+	private String delete(String[] commands) {
 		if(!controller.isUserListEmpty()) {
 			HashMap<String, Object> hashMap = new HashMap<String, Object>();
 			String input;
 			int ID;
 			// gets user to delete
-			input = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
+			input = getExistingID(commands[1], hashMap);
 
 			// confirmation
 			if(!input.equals("cancel")) {
 				ID = Integer.parseInt(input);
 				do {
-					input = getInput("Are you sure you want to delete user with ID: " + ID + "?\n"
-							+ "Type confirm or cancel.");
+					input = getInput(commands[2]);
 					if (!input.equals("confirm") && !input.equals("cancel")) {
-						System.out.println("Invalid command.");
+						return "Invalid command.";
 					}
 				} while (!input.equals("confirm") && !input.equals("cancel"));
 			}
@@ -200,18 +170,16 @@ public class TUI implements UI {
 					controller.deleteUser(hashMap);
 				} catch (Exception e) {
 					e.printStackTrace();
-					//TODO håndtering?
 				}
 			}
 		} else {
-			System.out.println("The user list is empty.");
+			return "The user list is empty.";
 		}
+		return null;
 	}
 
 	private String getInput(String message) {
-		System.out.println(message);
-		String input = scanner.nextLine();
-		return input;
+		return message;
 	}
 
 	private boolean isPositiveInteger(String input) {
@@ -300,17 +268,17 @@ public class TUI implements UI {
 		return m.matches();
 	}
 
-	private String getExistingID(String message, HashMap<String, Object> dataMap) {
+	private String getExistingID(String message, HashMap<String, Object> hashMap) {
 		String input;
 		do {
 			input = getInput(message);
 			if (isPositiveInteger(input)) {
-				dataMap.put("ID", Integer.parseInt(input));
-				if (!controller.exists(dataMap)) {
+				hashMap.put("ID", Integer.parseInt(input));
+				if (!controller.exists(hashMap)) {
 					System.out.println("User doesn't exist!");
 				}
 			}
-		} while (!controller.exists(dataMap) && !input.equals("cancel"));
+		} while (!controller.exists(hashMap) && !input.equals("cancel"));
 		return input;
 	}
 
@@ -323,14 +291,12 @@ public class TUI implements UI {
 				ID = Integer.parseInt(input);
 				dataMap.put("ID", ID);
 				if (controller.exists(dataMap)) {
-					System.out.println("That ID is taken.");
+					return "That ID is taken.";
 				}
 			}
 		} while ((ID < 11 || ID > 99 || controller.exists(dataMap)) && !input.equals("cancel"));
 		return input;
 	}
-
-	//TODO kan/skal valideres
 	private String getName(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
@@ -339,8 +305,6 @@ public class TUI implements UI {
 		} while ((input.length() < 2 || input.length() > 20) && !input.equals("cancel"));
 		return input;
 	}
-
-	//TODO kan hentes fra et valideret navn
 	private String getIni(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
@@ -361,15 +325,15 @@ public class TUI implements UI {
 
 	private String getPassword(String message, HashMap<String, Object> dataMap) {
 		String input;
-		do {
+//		do {
 			input = generatePassword(10);
 			dataMap.put("password", input);
-		} while(!isValidPassword(input) && !input.equals("cancel"));
+//		} while(!isValidPassword(input) && !input.equals("cancel"));
 		return input;
 		//TODO besked m.m skal implementeres her hvis bruger skal vælge nyt kodeord
 	}
 
-	private String getRoles(String message, HashMap<String, Object> dataMap) {
+	private String getRoles(String[] message, int fromIndex, HashMap<String, Object> dataMap) {
 		ArrayList<String> validRoles = new ArrayList<>();
 		validRoles.add("admin");
 		validRoles.add("pharmacist");
@@ -379,16 +343,17 @@ public class TUI implements UI {
 		String input;
 		do {
 			// gets input
-			input = getInput(message + "\nChosen roles: " + chosenRoles.toString()).toLowerCase();
+			input = getInput(message[fromIndex].toLowerCase());
 			// if its a valid role
 			if (validRoles.contains(input)) {
 				// if its not already added
 				if (!chosenRoles.contains(input)) {
 					chosenRoles.add(input);
 				} else {
-					System.out.println("Role already chosen.");
+					return "Role already chosen.";
 				}
 			}
+			fromIndex++;
 			if(input.equals("done") && chosenRoles.isEmpty()) {
 				continue;
 			}

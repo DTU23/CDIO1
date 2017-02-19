@@ -56,7 +56,6 @@ public class Ctrl {
      * @throws IDataStorage.DALException exception from userobject interactions
      */
     public String createUser(HashMap<String, Object> hashMap)throws UserDTO.DTOException, IDataStorage.DALException{
-        hashMap.put("password", this.generatePassword(10));
         this.dao.createUser(new UserDTO(hashMap));
         return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString())).getPassword();
     }
@@ -108,37 +107,6 @@ public class Ctrl {
      */
     public boolean exists(HashMap<String, Object> hashMap){
         return this.dao.userExists(Integer.parseInt(hashMap.get("ID").toString()));
-    }
-
-    /**
-     * TODO : Passthrough for generatePassword. Eventually user is allowed to choose passwords
-     * @return String
-     */
-    public String changePassword(){
-        return generatePassword(10);
-    }
-
-
-    /**
-     * Generates a random password with listed characters and symbols
-     * @param length how many characters should the password be
-     * @return String
-     */
-    private String generatePassword(int length){
-        String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String characters = "abcdefghijklmnopqrstuvwxyz";
-        String numbers = "0123456789";
-        String symbols = "!@#$&*";
-        String passwordCharacters = charactersCaps + characters + numbers + symbols;
-        Random rnd = new Random();
-        char[] password = new char[length];
-
-        //do {
-            for (int i = 0; i < length; i++) {
-                password[i] = passwordCharacters.charAt(rnd.nextInt(passwordCharacters.length()));
-            }
-        //}while (!this.validatePassword(new String(password), hashMap));
-        return new String(password);
     }
 
     /**

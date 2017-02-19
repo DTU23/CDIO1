@@ -130,7 +130,7 @@ public class TUI implements UI {
 								+ "name - lets you change the user name.\n"
 								+ "ini - lets you change the initials.\n"
 								+ "password - gives you a new password.\n"
-								+ "role - lets you change the role\n"
+								+ "roles - lets you change the roles\n"
 								+ "cancel - takes you to main menu.").toLowerCase();
 						// divides the flow
 						switch (choice) {
@@ -144,12 +144,11 @@ public class TUI implements UI {
 							getCpr("Type new social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
 							break loop;
 						case "password":
-							// TODO - password isn't saved to file, but is prompted in console.
 							changePassword("");
 							//TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
 							break loop;
 						case "role":
-							// TODO - should it be possible to demote one from a role? In that case it has to be implemented.
+							// TODO evt. to forskellige flows her, en der tilføjer og en der fjerner
 							getRoles("Choose roles from admin, pharmacist, foreman or operator, type done to finish adding roles " +
 									"or type cancel to go to main menu. You must add at least one role.", hashMap);
 							break loop;
@@ -176,18 +175,21 @@ public class TUI implements UI {
 		if(!controller.isUserListEmpty()) {
 			HashMap<String, Object> hashMap = new HashMap<String, Object>();
 			String input;
-			String ID;
+			int ID;
 			// gets user to delete
-			ID = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
+			input = getExistingID("Please choose which user you want to delete by typing the ID, or type cancel to go to main menu.", hashMap);
 
 			// confirmation
-			do {
-				input = getInput("Are you sure you want to delete user with ID: " + Integer.parseInt(ID) + "?\n"
-						+ "Type confirm or cancel.");
-				if (!input.equals("confirm") && !input.equals("cancel")) {
-					System.out.println("Invalid command.");
-				}
-			} while (!input.equals("confirm") && !input.equals("cancel"));
+			if(!input.equals("cancel")) {
+				ID = Integer.parseInt(input);
+				do {
+					input = getInput("Are you sure you want to delete user with ID: " + ID + "?\n"
+							+ "Type confirm or cancel.");
+					if (!input.equals("confirm") && !input.equals("cancel")) {
+						System.out.println("Invalid command.");
+					}
+				} while (!input.equals("confirm") && !input.equals("cancel"));
+			}
 			// executes if confirmed
 			if (input.equals("confirm")) {
 				try {
@@ -328,7 +330,7 @@ public class TUI implements UI {
 		String input;
 		do {
 			// gets input
-			input = getInput(message).toLowerCase();
+			input = getInput(message + "\nChosen roles: " + chosenRoles.toString()).toLowerCase();
 			// if its a valid role
 			if (validRoles.contains(input)) {
 				// if its not already added

@@ -12,21 +12,21 @@ import model.UserDAO;
 import model.UserDTO;
 
 /**
- *
+ * This controller class handles communication with the data-layer.
+ * It also has methods for generating and verifying passwords
  */
 public class Ctrl {
-    UserDAO dao;
-
-
+    private UserDAO dao;
+    
     public Ctrl(UserDAO dao_const){
         this.dao = dao_const;
     }
 
     /**
      * Returns user object from hashmap-key ID
-     * @param hashMap
-     * @return
-     * @throws IDataStorage.DALException
+     * @param hashMap user-details organized in a hashmap
+     * @return User object
+     * @throws IDataStorage.DALException exception from data-layer
      */
     public UserDTO getUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
         return this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
@@ -34,7 +34,7 @@ public class Ctrl {
 
     /**
      * Gets all users from DAO
-     * @return
+     * @return array list of user objects
      */
     public ArrayList<UserDTO> getUserList(){
         return dao.getUserList();
@@ -42,7 +42,7 @@ public class Ctrl {
 
     /**
      * Checks if any users exist
-     * @return
+     * @return true if user list is empty, false if not.
      */
     public boolean isUserListEmpty(){
         return dao.isUserListEmpty();
@@ -50,10 +50,10 @@ public class Ctrl {
 
     /**
      * Creates new user
-     * @param hashMap
-     * @return
-     * @throws IDataStorage.DALException
-     * @throws IOException
+     * @param hashMap user-details organized in a hashmap
+     * @return randomly generated password for the new user
+     * @throws IDataStorage.DALException exception from data-layer
+     * @throws IOException exception from data-layer
      */
     public String createUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException, IOException {
         try {
@@ -68,9 +68,9 @@ public class Ctrl {
 
     /**
      * Deletes a user from the data persistence
-     * @param hashMap
-     * @throws IDataStorage.DALException
-     * @throws IOException
+     * @param hashMap user-details organized in a hashmap
+     * @throws IDataStorage.DALException exception from data-layer
+     * @throws IOException exception from data-layer
      */
     public void deleteUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, IOException {
         this.dao.deleteUser(Integer.parseInt(hashMap.get("ID").toString()));
@@ -78,10 +78,10 @@ public class Ctrl {
 
     /**
      * Edits a user. Takes ID for user being edited and a hashmap for which key to update.
-     * @param hashMap
-     * @throws IDataStorage.DALException
-     * @throws UserDTO.DTOException
-     * @throws IOException
+     * @param hashMap user-details organized in a hashmap
+     * @throws IDataStorage.DALException exception raised at data-layer
+     * @throws UserDTO.DTOException exception raised for user operations
+     * @throws IOException exception raised if file storage fails.
      */
     public void editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, UserDTO.DTOException, IOException {
         UserDTO user = this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
@@ -108,8 +108,8 @@ public class Ctrl {
 
     /**
      * Checks if user exists
-     * @param hashMap
-     * @return
+     * @param hashMap user-details organized in a hashmap
+     * @return boolean: true if user exists, false if not.
      */
     public boolean exists(HashMap<String, Object> hashMap){
         return this.dao.userExists(Integer.parseInt(hashMap.get("ID").toString()));
@@ -117,7 +117,7 @@ public class Ctrl {
 
     /**
      * TODO : Passthrough for generatePassword. Eventually user is allowed to choose passwords
-     * @return
+     * @return String
      */
     public String changePassword(){
         return generatePassword(10);
@@ -152,9 +152,9 @@ public class Ctrl {
      * minimum 2 uppcase characters
      * minimum 2 lower case characters
      * username not present in password string
-     * @param password
-     * @param hashMap
-     * @return
+     * @param password password string to be validated
+     * @param hashMap user-details organized in a hashmap
+     * @return true if password is allowed, false if not.
      * @throws IDataStorage.DALException
      */
     private boolean validatePassword(String password, HashMap<String, Object> hashMap)throws IDataStorage.DALException {
@@ -165,9 +165,9 @@ public class Ctrl {
 
     /**
      * Initializes datapersistence/DAO.
-     * @throws IDataStorage.DALException
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws IDataStorage.DALException exception from data-layer
+     * @throws IOException exception from data-layer
+     * @throws ClassNotFoundException exception from data-layer
      */
     public void initStorage() throws IDataStorage.DALException, IOException, ClassNotFoundException {
         this.dao.init();

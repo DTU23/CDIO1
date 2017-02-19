@@ -58,6 +58,9 @@ public class Ctrl {
         if (user == null){
             return false;
         }else{
+            if (hashMap.containsKey("userName")) {
+                user.setUserName(hashMap.get("userName").toString());
+            }
             if (hashMap.containsKey("cpr")){
                 user.setCpr(hashMap.get("cpr").toString());
             }

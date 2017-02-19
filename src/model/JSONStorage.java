@@ -88,9 +88,7 @@ public class JSONStorage implements IDataStorage {
                 JSONObject jsonRolesObject = (JSONObject) jsonUser;
                 ArrayList<String> roles = new ArrayList<String>();
                 roles.addAll((ArrayList<String>) jsonRolesObject.get("roles"));
-                for (String role: roles) {
-                    userDTO.addRole(role);
-                }
+                userDTO.setRoles(roles);
                 userList.add(userDTO);
             }
             return userList;

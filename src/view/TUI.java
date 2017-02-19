@@ -144,10 +144,12 @@ public class TUI implements UI {
 							getCpr("Type new social security number as 10 digits, no \"-\", or type cancel to go to main menu.", hashMap);
 							break loop;
 						case "password":
+							// TODO - password isn't saved to file, but is prompted in console.
 							changePassword("");
 							//TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
 							break loop;
 						case "role":
+							// TODO - should it be possible to demote one from a role? In that case it has to be implemented.
 							getRoles("Choose roles from admin, pharmacist, foreman or operator, type done to finish adding roles " +
 									"or type cancel to go to main menu. You must add at least one role.", hashMap);
 							break loop;

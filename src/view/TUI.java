@@ -300,17 +300,17 @@ public class TUI implements UI {
 		return m.matches();
 	}
 
-	private String getExistingID(String message, HashMap<String, Object> hashMap) {
+	private String getExistingID(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
 			input = getInput(message);
 			if (isPositiveInteger(input)) {
-				hashMap.put("ID", Integer.parseInt(input));
-				if (!controller.exists(hashMap)) {
+				dataMap.put("ID", Integer.parseInt(input));
+				if (!controller.exists(dataMap)) {
 					System.out.println("User doesn't exist!");
 				}
 			}
-		} while (!controller.exists(hashMap) && !input.equals("cancel"));
+		} while (!controller.exists(dataMap) && !input.equals("cancel"));
 		return input;
 	}
 
@@ -322,8 +322,11 @@ public class TUI implements UI {
 			if (isPositiveInteger(input)) {
 				ID = Integer.parseInt(input);
 				dataMap.put("ID", ID);
+				if (controller.exists(dataMap)) {
+					System.out.println("That ID is taken.");
+				}
 			}
-		} while ((ID < 11 || ID > 99) && !input.equals("cancel"));
+		} while ((ID < 11 || ID > 99 || controller.exists(dataMap)) && !input.equals("cancel"));
 		return input;
 	}
 

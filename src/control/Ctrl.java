@@ -54,7 +54,25 @@ public class Ctrl {
     }
 
     public void editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException, UserDTO.DTOException, IOException {
-        UserDTO user = new UserDTO(hashMap);
+        UserDTO user = this.dao.getUser(Integer.parseInt(hashMap.get("ID").toString()));
+        if(hashMap.containsKey("cpr")){
+            user.setCpr(hashMap.get("cpr").toString());
+        }
+        if(hashMap.containsKey("ini")){
+            user.setIni(hashMap.get("ini").toString());
+        }
+        if(hashMap.containsKey("password")) {
+            user.setPassword(hashMap.get("password").toString());
+        }
+        if(hashMap.containsKey("userName")){
+            user.setUserName(hashMap.get("userName").toString());
+        }
+        if(hashMap.containsKey("roles")){
+            user.setRoles(new ArrayList<String>());
+            for (String role: (ArrayList<String>)hashMap.get("roles")) {
+                user.addRole(role);
+            }
+        }
         this.dao.updateUser(user);
     }
 

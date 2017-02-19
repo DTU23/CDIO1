@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  */
@@ -9,14 +11,14 @@ public interface IDataStorage {
      * @param users
      * @return boolean Error
      */
-    boolean write(DTOList<UserDTO> users) throws DALException;
+    boolean write(ArrayList<UserDTO> users) throws DALException;
     //TODO lav noget exception throwing handling i stedet for boolean return
 
     /**
      * Reads data input to memory
      * @return ArrayList<UserDTO>
      */
-    DTOList<UserDTO> read() throws DALException;
+    ArrayList<UserDTO> read() throws DALException;
     
   	public class DALException extends Exception {
   		

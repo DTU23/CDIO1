@@ -66,7 +66,7 @@ public class JSONStorage implements IDataStorage {
      * @return ArrayList<UserDTO>
      */
     @Override
-    public ArrayList<UserDTO> read() {
+    public DTOList<UserDTO> read() {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(this.filePath));

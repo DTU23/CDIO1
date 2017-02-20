@@ -19,7 +19,7 @@ public interface IDataStorage {
      * Reads data input to memory
      * @return ArrayList<UserDTO>
      */
-    ArrayList<UserDTO> read() throws IOException, ClassNotFoundException;
+    DTOList<UserDTO> read() throws IOException, ClassNotFoundException;
     
   	public class DALException extends Exception {
   		

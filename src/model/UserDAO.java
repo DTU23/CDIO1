@@ -7,7 +7,7 @@ import model.IDataStorage.DALException;
 public class UserDAO {
 
 	private IDataStorage storage;
-	private ArrayList<UserDTO> users;
+	private DTOList<UserDTO> users;
 
 	public UserDAO(IDataStorage storage) {
 		this.storage = storage;

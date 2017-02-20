@@ -35,7 +35,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public ArrayList<UserDTO> read() throws IOException, ClassNotFoundException {
+    public DTOList<UserDTO> read() throws IOException, ClassNotFoundException {
         if(!fileExists()) {
             createFile();
         }

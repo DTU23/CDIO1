@@ -3,32 +3,33 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 4545864587995944260L;
     private int userID;
     private String userName;
-    private String password;
-    private String cpr;
     private String ini;
-    private ArrayList<String> roles = new ArrayList<String>();
-
-    public UserDTO() throws DTOException {
-
-    }
+    private String cpr;
+    private String password;
+    private ArrayList<String> roles;
+    
+    public UserDTO() {}
 
     public UserDTO(HashMap<String, Object> hashMap) throws DTOException {
-        this.roles = new ArrayList<>();
         if(hashMap.containsKey("ID")){
-            this.userID = Integer.parseInt(hashMap.get("ID").toString());
+            this.userID = (int) hashMap.get("ID");
         }else {
-            throw new DTOException("Not User ID Provided!");
+            throw new DTOException("No ID Provided!");
         }
         if (hashMap.containsKey("userName")) {
             this.userName = hashMap.get("userName").toString();
         } else {
-            throw new DTOException("No username provided");
+            throw new DTOException("No user name provided");
+        }
+        if (hashMap.containsKey("ini")) {
+            this.setIni(hashMap.get("ini").toString());
+        } else {
+            throw new DTOException("No initials provided");
         }
         if (hashMap.containsKey("cpr")) {
             this.setCpr(hashMap.get("cpr").toString());
@@ -38,14 +39,13 @@ public class UserDTO implements Serializable {
         if (hashMap.containsKey("password")) {
             this.setPassword(hashMap.get("password").toString());
         } else {
-            throw new DTOException("No password provided!");
-        }
-        if (hashMap.containsKey("ini")) {
-            this.setIni(hashMap.get("ini").toString());
+            throw new DTOException("No password provided");
         }
         // TODO add exceptionhandling for the casting
         if (hashMap.containsKey("roles")) {
-            roles.addAll((ArrayList<String>) hashMap.get("roles"));
+            this.roles = (ArrayList<String>) hashMap.get("roles");
+        } else {
+            throw new DTOException("No role provided");
         }
     }
 
@@ -120,25 +120,6 @@ public class UserDTO implements Serializable {
      */
     public void setRoles(ArrayList<String> roles) {
         this.roles = roles;
-    }
-
-    /**
-     * Adds a role to user DTO.
-     *
-     * @param role
-     */
-    public void addRole(String role) {
-        this.roles.add(role);
-    }
-
-    /**
-     * Removes a role from user DTO.
-     *
-     * @param role
-     * @return true if role existed, false if not
-     */
-    public boolean removeRole(String role) {
-        return this.roles.remove(role);
     }
 
     @Override

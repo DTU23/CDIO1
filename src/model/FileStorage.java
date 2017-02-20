@@ -26,13 +26,14 @@ public class FileStorage implements IDataStorage {
             oOS = new ObjectOutputStream(fOS);
 
             // Write every object to the file
-            for (UserDTO user : users) {
-                oOS.writeObject(user);
+            for (int i = 0; i < users.size(); i++) {
+                oOS.writeObject(users.get(i));
             }
-        } catch (Exception e) {
-            throw new DALException("Unable to write to file", e);
-        }
-        finally {
+        } catch (FileNotFoundException e) {
+            throw new DALException("Error locating file", e);
+        } catch (IOException e) {
+            throw new DALException("Error writing to disk", e);
+        } finally {
             if (oOS != null) {
                 try {
                     oOS.close();
@@ -72,8 +73,11 @@ public class FileStorage implements IDataStorage {
             } catch (Exception e) {
                 // No problem - no more objects to import
             }
-        } catch (Exception e){
-            throw new DALException("Unable to read file", e);
+
+        } catch (FileNotFoundException e) {
+            //No problem - just returning empty userList
+        } catch (IOException e) {
+            throw new DALException("Error while reading disk!", e);
         } finally {
             if (oIS != null){
                 try {

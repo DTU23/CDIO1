@@ -37,9 +37,8 @@ public class UserDAO {
 	}
 
 	public void updateUser(UserDTO user) throws DALException {
-		UserDTO temp = user; //TODO Is this an unecessary temp?
 		deleteUser(user.getUserID());
-		createUser(temp);
+		createUser(user);
 		storage.write(users);
 	}
 

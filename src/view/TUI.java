@@ -295,7 +295,8 @@ public class TUI implements UI {
 	 * @return
 	 */
 	private boolean isValidPassword(String password) {
-		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?!.*" +/* hashMap.get("userName").toString() +*/ ")(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
+		//(?!.*" + hashMap.get("userName").toString()+")
+		Pattern p = Pattern.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
 		Matcher m = p.matcher(password);
 		return m.matches();
 	}

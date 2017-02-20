@@ -2,7 +2,6 @@ package model;
 
 import java.io.*;
 import java.util.ArrayList;
-import model.DTOList;
 
 public class FileStorage implements IDataStorage {
 
@@ -16,7 +15,7 @@ public class FileStorage implements IDataStorage {
     }
 
     @Override
-    public boolean write(ArrayList<UserDTO> users) throws DALException {
+    public boolean write(ArrayList<UserDTO> users) throws IOException {
         FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 
@@ -29,32 +28,20 @@ public class FileStorage implements IDataStorage {
             for (int i = 0; i < users.size(); i++) {
                 oOS.writeObject(users.get(i));
             }
-        } catch (FileNotFoundException e) {
-            throw new DALException("Error locating file", e);
-        } catch (IOException e) {
-            throw new DALException("Error writing to disk", e);
         } finally {
-            if (oOS != null) {
-                try {
-                    oOS.close();
-                } catch (IOException e) {
-                    throw new DALException("Unable to close ObjectStream", e);
-                }
-            }
+            oOS.close();
         }
         return true;
     }
 
     @Override
-    public ArrayList<UserDTO> read() throws DALException {
+    public ArrayList<UserDTO> read() throws IOException, ClassNotFoundException {
         if(!fileExists()) {
             createFile();
         }
-
         DTOList<UserDTO> userList = new DTOList<>();
         FileInputStream fIS = null;
         ObjectInputStream oIS = null;
-
         try {
             // Deserialize the file back into the collection
             fIS = new FileInputStream(path);
@@ -64,27 +51,15 @@ public class FileStorage implements IDataStorage {
             try {
                 while (true) {
                     UserDTO user = (UserDTO) oIS.readObject();
-                    if (user instanceof UserDTO) {
-                        userList.add(user);
-                    } else {
-                        throw new DALException("Wrong object in file");
-                    }
+                    userList.add(user);
                 }
-            } catch (Exception e) {
+            } catch (EOFException e) {
                 // No problem - no more objects to import
             }
 
-        } catch (FileNotFoundException e) {
-            //No problem - just returning empty userList
-        } catch (IOException e) {
-            throw new DALException("Error while reading disk!", e);
         } finally {
             if (oIS != null){
-                try {
-                    oIS.close();
-                } catch (IOException e) {
-                    throw new DALException("Error closing pObjectStream!", e);
-                }
+                oIS.close();
             }
         }
         return userList;
@@ -94,20 +69,14 @@ public class FileStorage implements IDataStorage {
         return new File(path).exists();
     }
 
-    public void createFile() throws DALException {
+    public void createFile() throws IOException {
         PrintWriter writer = null;
         try{
             writer = new PrintWriter(path, "UTF-8");
             writer.println("");
-        } catch (IOException e) {
-            throw new DALException("Unable to create file", e);
         } finally {
             if(writer != null) {
-                try {
-                    writer.close();
-                } catch (Exception e) {
-                    throw new DALException("Unable to close writer", e);
-                }
+                writer.close();
             }
         }
     }

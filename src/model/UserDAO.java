@@ -54,4 +54,6 @@ public class UserDAO implements IDAL{
 		}
 		return false;
 	}
+	
+	public void init() throws DALException {}
 }

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.IDAL;
 import model.IDataStorage;
-import model.UserDAO;
 import model.UserDTO;
 
 /**
@@ -13,10 +13,10 @@ import model.UserDTO;
  * It also has methods for generating and verifying passwords
  */
 public class Ctrl {
-	private UserDAO dao;
+	private IDAL dao;
 
-	public Ctrl(UserDAO dao_const){
-		this.dao = dao_const;
+	public Ctrl(IDAL dao){
+		this.dao = dao;
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class Ctrl {
 	 * Gets all users from DAO
 	 * @return array list of user objects
 	 */
-	public ArrayList<UserDTO> getUserList(){
+	public ArrayList<UserDTO> getUserList() throws IDataStorage.DALException{
 		return dao.getUserList();
 	}
 

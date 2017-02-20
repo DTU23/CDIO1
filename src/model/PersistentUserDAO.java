@@ -81,5 +81,4 @@ public class PersistentUserDAO implements IDAL{
 			throw new DALException("IOEcetion", e);
 		}
 	}
-
 }

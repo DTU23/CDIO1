@@ -8,7 +8,7 @@ public interface IDAL {
 
 	UserDTO getUser(int userId) throws DALException;
 
-	ArrayList<UserDTO> getUserList();
+	ArrayList<UserDTO> getUserList() throws DALException;
 	
 	boolean isUserListEmpty();
 
@@ -19,4 +19,6 @@ public interface IDAL {
 	void deleteUser(int userId) throws DALException;
 
 	boolean userExists(int userId);
+	
+	void init() throws DALException;
 }

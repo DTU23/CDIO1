@@ -390,10 +390,7 @@ public class TUI implements UI {
 					System.out.println("Role already chosen.");
 				}
 			}
-			if(input.equals("done") && chosenRoles.isEmpty()) {
-				continue;
-			}
-		} while (!input.equals("done") && !input.equals("cancel"));
+		} while ((!input.equals("done") && !input.equals("cancel")) || (input.equals("done") && chosenRoles.isEmpty()));
 		// executes if user didn't type cancel
 		if (!input.equals("cancel")) {
 			dataMap.put("roles", chosenRoles);

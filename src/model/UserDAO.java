@@ -33,13 +33,21 @@ public class UserDAO {
 
 	public void createUser(UserDTO user) throws DALException {
 		users.add(user);
-		storage.write(users);
+		try {
+			storage.write(users);
+		}catch (IOException e){
+			throw new DALException("IOException", e);
+		}
 	}
 
 	public void updateUser(UserDTO user) throws DALException {
 		deleteUser(user.getUserID());
 		createUser(user);
-		storage.write(users);
+		try {
+			storage.write(users);
+		}catch (IOException e){
+			throw new DALException("IOException", e);
+		}
 	}
 
 	public void deleteUser(int userId) throws DALException {
@@ -48,7 +56,11 @@ public class UserDAO {
 				users.remove(users.get(i));
 			}
 		}
-		storage.write(users);
+		try {
+			storage.write(users);
+		}catch (IOException e){
+			throw new DALException("IOException", e);
+		}
 	}
 
 	public boolean userExists(int userId){
@@ -60,8 +72,14 @@ public class UserDAO {
 		return false;
 	}
 
-	public void init() throws DALException, IOException, ClassNotFoundException {
-		users = storage.read();
+	public void init() throws DALException {
+		try {
+			users = storage.read();
+		}catch (ClassNotFoundException e){
+			throw new DALException("ClassNotFoundException", e);
+		}catch (IOException e){
+			throw new DALException("IOEcetion", e);
+		}
 	}
 
 }

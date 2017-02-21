@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface IDAL {
 
-	UserDTO getUser(int userId) throws DALException;
+	UserDTO getUser(int userId);
 
 	ArrayList<UserDTO> getUserList() throws DALException;
 	

@@ -3,6 +3,8 @@ package integration_test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import model.IDAL;
+import model.PersistentUserDAO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +22,7 @@ public class UserSystemFileStorageTest {
 	@Before
 	public void setUp() throws Exception {
 		IDataStorage storage = new FileStorage();
-		UserDAO dao = new UserDAO(storage);
+		IDAL dao = new PersistentUserDAO(storage);
 		Ctrl controller = new Ctrl(dao);
 		controller.initStorage();
 		tui = new TUITestDriver(controller);

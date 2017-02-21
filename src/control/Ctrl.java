@@ -23,9 +23,8 @@ public class Ctrl {
 	 * Returns user object from hashmap-key ID
 	 * @param hashMap user-details organized in a hashmap
 	 * @return User object
-	 * @throws IDataStorage.DALException exception from data-layer
 	 */
-	public UserDTO getUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+	public UserDTO getUser(HashMap<String, Object> hashMap){
 		return this.dao.getUser((int) hashMap.get("ID"));
 	}
 
@@ -84,7 +83,6 @@ public class Ctrl {
 		if(hashMap.containsKey("password")) {
 			user.setPassword(hashMap.get("password").toString());
 		}
-		// TODO add exceptionhandling for the casting
 		if(hashMap.containsKey("roles")){
 			user.setRoles((ArrayList<String>) hashMap.get("roles"));
 		}

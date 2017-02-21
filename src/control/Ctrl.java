@@ -25,7 +25,7 @@ public class Ctrl {
 	 * @return User object
 	 * @throws IDataStorage.DALException exception from data-layer
 	 */
-	public UserDTO getUser(HashMap<String, Object> hashMap)throws IDataStorage.DALException{
+	public UserDTO getUser(HashMap<String, Object> hashMap) throws IDAL.DALException {
 		return this.dao.getUser((int) hashMap.get("ID"));
 	}
 
@@ -33,7 +33,7 @@ public class Ctrl {
 	 * Gets all users from DAO
 	 * @return array list of user objects
 	 */
-	public ArrayList<UserDTO> getUserList(){
+	public ArrayList<UserDTO> getUserList() throws IDAL.DALException {
 		return dao.getUserList();
 	}
 
@@ -51,7 +51,7 @@ public class Ctrl {
 	 * @throws IDataStorage.DALException exception from data-layer
 	 * @throws IDataStorage.DALException exception from userobject interactions
 	 */
-	public void createUser(HashMap<String, Object> hashMap) throws UserDTO.DTOException, IDataStorage.DALException{
+	public void createUser(HashMap<String, Object> hashMap) throws UserDTO.DTOException, IDAL.DALException {
 		this.dao.createUser(new UserDTO(hashMap));
 	}
 
@@ -60,7 +60,7 @@ public class Ctrl {
 	 * @param hashMap user-details organized in a hashmap
 	 * @throws IDataStorage.DALException exception from data-layer
 	 */
-	public void deleteUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException {
+	public void deleteUser(HashMap<String, Object> hashMap) throws IDAL.DALException {
 		this.dao.deleteUser((int) hashMap.get("ID"));
 	}
 
@@ -70,7 +70,7 @@ public class Ctrl {
 	 * @throws IDataStorage.DALException exception raised at data-layer
 	 */
 	@SuppressWarnings("unchecked")
-	public void editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException{
+	public void editUser(HashMap<String, Object> hashMap) throws IDAL.DALException {
 		UserDTO user = this.dao.getUser((int) hashMap.get("ID"));
 		if(hashMap.containsKey("userName")){
 			user.setUserName(hashMap.get("userName").toString());
@@ -106,7 +106,7 @@ public class Ctrl {
 	 * @throws IOException exception from data-layer
 	 * @throws ClassNotFoundException exception from data-layer
 	 */
-	public void initStorage() throws IDataStorage.DALException, IOException, ClassNotFoundException {
+	public void initStorage() throws IDAL.DALException {
 		this.dao.init();
 	}
 }

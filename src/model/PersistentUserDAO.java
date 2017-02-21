@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import model.storage.IDataStorage;
-import model.storage.IDataStorage.DALException;
 
 public class PersistentUserDAO implements IDAL{
 
@@ -25,7 +24,7 @@ public class PersistentUserDAO implements IDAL{
 		return null;
 	}
 
-	public ArrayList<UserDTO> getUserList() {
+	public ArrayList<UserDTO> getUserList() throws DALException {
 		return users;
 	}
 	

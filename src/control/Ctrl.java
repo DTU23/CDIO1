@@ -33,7 +33,7 @@ public class Ctrl {
 	 * Gets all users from DAO
 	 * @return array list of user objects
 	 */
-	public ArrayList<UserDTO> getUserList() throws IDataStorage.DALException{
+	public ArrayList<UserDTO> getUserList(){
 		return dao.getUserList();
 	}
 

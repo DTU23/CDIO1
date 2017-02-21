@@ -1,14 +1,16 @@
 package model;
 
+import java.io.IOException;
 import java.util.ArrayList;
-
 import model.IDataStorage.DALException;
 
-public class UserDAO implements IDAL{
+public class PersistentUserDAO implements IDAL{
 
+	private IDataStorage storage;
 	private DTOList<UserDTO> users;
 
-	public UserDAO() {
+	public PersistentUserDAO(IDataStorage storage) {
+		this.storage = storage;
 		users = new DTOList<UserDTO>();
 	}
 
@@ -24,18 +26,28 @@ public class UserDAO implements IDAL{
 	public ArrayList<UserDTO> getUserList() {
 		return users;
 	}
-
+	
 	public boolean isUserListEmpty(){
-		return users.isEmpty();
-	}
+        return users.isEmpty();
+    }
 
 	public void createUser(UserDTO user) throws DALException {
 		users.add(user);
+		try {
+			storage.write(users);
+		}catch (IOException e){
+			throw new DALException("IOException", e);
+		}
 	}
 
 	public void updateUser(UserDTO user) throws DALException {
 		deleteUser(user.getUserID());
 		createUser(user);
+		try {
+			storage.write(users);
+		}catch (IOException e){
+			throw new DALException("IOException", e);
+		}
 	}
 
 	public void deleteUser(int userId) throws DALException {
@@ -43,6 +55,11 @@ public class UserDAO implements IDAL{
 			if (users.get(i).getUserID() == userId) {
 				users.remove(users.get(i));
 			}
+		}
+		try {
+			storage.write(users);
+		}catch (IOException e){
+			throw new DALException("IOException", e);
 		}
 	}
 
@@ -54,6 +71,14 @@ public class UserDAO implements IDAL{
 		}
 		return false;
 	}
-	
-	public void init() throws DALException {}
+
+	public void init() throws DALException {
+		try {
+			users = storage.read();
+		}catch (ClassNotFoundException e){
+			throw new DALException("ClassNotFoundException", e);
+		}catch (IOException e){
+			throw new DALException("IOEcetion", e);
+		}
+	}
 }

@@ -74,7 +74,7 @@ public class TUI implements UI {
 
 		// gets user name
 		if (!input.equals("cancel")) {
-			input = getName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
+			input = getUserName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
 		}
 
 		// gets initials
@@ -136,7 +136,7 @@ public class TUI implements UI {
 						// divides the flow
 						switch (choice) {
 						case "name":
-							getName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
+							getUserName("Choose a username between 2 and 20 characters, or type cancel to go to main menu.", hashMap);
 							break loop;
 						case "ini":
 							getIni("Choose initials between 2 and 4 characters, or type cancel to go to main menu.", hashMap);
@@ -260,7 +260,7 @@ public class TUI implements UI {
 		return input;
 	}
 
-	private String getName(String message, HashMap<String, Object> dataMap) {
+	private String getUserName(String message, HashMap<String, Object> dataMap) {
 		String input;
 		do {
 			input = getInput(message);

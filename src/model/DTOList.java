@@ -7,7 +7,10 @@ import java.util.ArrayList;
  * @param <e>
  */
 public class DTOList<e> extends ArrayList<e> {
-    @Override
+    
+	private static final long serialVersionUID = 6503781544938620653L;
+
+	@Override
     public String toString(){
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < this.size(); i++){

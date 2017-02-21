@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * Simple class extension to modify arraylist tostring method
  * @param <e>
  */
-public class DTOList<e> extends ArrayList<e> {
-    
+public class DTOList<E> extends ArrayList<E> {
+   
 	private static final long serialVersionUID = 6503781544938620653L;
 
 	@Override

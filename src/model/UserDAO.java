@@ -2,8 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import model.storage.IDataStorage.DALException;
-
 public class UserDAO implements IDAL{
 
 	private DTOList<UserDTO> users;
@@ -12,7 +10,7 @@ public class UserDAO implements IDAL{
 		users = new DTOList<>();
 	}
 
-	public UserDTO getUser(int userId) throws DALException {
+	public UserDTO getUser(int userId) {
 		for (UserDTO user : users) {
 			if (user.getUserID() == userId) {
 				return user;
@@ -21,7 +19,7 @@ public class UserDAO implements IDAL{
 		return null;
 	}
 
-	public ArrayList<UserDTO> getUserList() {
+	public ArrayList<UserDTO> getUserList() throws DALException {
 		return users;
 	}
 

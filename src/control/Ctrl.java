@@ -103,10 +103,8 @@ public class Ctrl {
 	/**
 	 * Initializes datapersistence/DAO.
 	 * @throws IDataStorage.DALException exception from data-layer
-	 * @throws IOException exception from data-layer
-	 * @throws ClassNotFoundException exception from data-layer
 	 */
-	public void initStorage() throws IDataStorage.DALException, IOException, ClassNotFoundException {
+	public void initStorage() throws IDataStorage.DALException {
 		this.dao.init();
 	}
 }

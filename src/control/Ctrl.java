@@ -48,7 +48,6 @@ public class Ctrl {
 	/**
 	 * Creates new user
 	 * @param hashMap user-details organized in a hashmap
-	 * @return randomly generated password for the new user
 	 * @throws IDataStorage.DALException exception from data-layer
 	 * @throws IDataStorage.DALException exception from userobject interactions
 	 */
@@ -70,6 +69,7 @@ public class Ctrl {
 	 * @param hashMap user-details organized in a hashmap
 	 * @throws IDataStorage.DALException exception raised at data-layer
 	 */
+	@SuppressWarnings("unchecked")
 	public void editUser(HashMap<String, Object> hashMap) throws IDataStorage.DALException{
 		UserDTO user = this.dao.getUser((int) hashMap.get("ID"));
 		if(hashMap.containsKey("userName")){

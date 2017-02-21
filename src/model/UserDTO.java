@@ -15,6 +15,7 @@ public class UserDTO implements Serializable {
     
     public UserDTO() {}
 
+    @SuppressWarnings("unchecked")
     public UserDTO(HashMap<String, Object> hashMap) throws DTOException {
         if(hashMap.containsKey("ID")){
             this.userID = (int) hashMap.get("ID");
@@ -41,7 +42,6 @@ public class UserDTO implements Serializable {
         } else {
             throw new DTOException("No password provided");
         }
-        // TODO add exceptionhandling for the casting
         if (hashMap.containsKey("roles")) {
             this.roles = (ArrayList<String>) hashMap.get("roles");
         } else {
@@ -79,8 +79,7 @@ public class UserDTO implements Serializable {
 
     /**
      * Sets new password for user
-     *
-     * @param password
+     * @param password as a string
      */
     public void setPassword(String password) {
         this.password = password;
@@ -88,8 +87,7 @@ public class UserDTO implements Serializable {
 
     /**
      * Gets CPR number from user DTO.
-     *
-     * @return
+     * @return this cpr String
      */
     public String getCpr() {
         return this.cpr;
@@ -97,8 +95,7 @@ public class UserDTO implements Serializable {
 
     /**
      * Sets CPR number from user DTO.
-     *
-     * @param cpr
+     * @param cpr cpr-number as string
      */
     public void setCpr(String cpr) {
         this.cpr = cpr;
@@ -106,8 +103,7 @@ public class UserDTO implements Serializable {
 
     /**
      * Retrieves roles from user DTO.
-     *
-     * @return
+     * @return list of roles
      */
     public ArrayList<String> getRoles() {
         return this.roles;
@@ -115,8 +111,7 @@ public class UserDTO implements Serializable {
 
     /**
      * Sets roles on user DTO.
-     *
-     * @param roles
+     * @param roles arroylist of roles-strings
      */
     public void setRoles(ArrayList<String> roles) {
         this.roles = roles;

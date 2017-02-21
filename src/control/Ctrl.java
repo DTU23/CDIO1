@@ -1,12 +1,11 @@
 package control;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.IDAL;
-import model.storage.IDataStorage;
 import model.UserDTO;
+import model.storage.IDataStorage;
 
 /**
  * This controller class handles communication with the data-layer.

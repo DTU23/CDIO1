@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import control.Ctrl;
+import model.IDAL.DALException;
 import model.Validation;
 
 public class TUI implements UI {
@@ -111,7 +112,11 @@ public class TUI implements UI {
 		if(controller.isUserListEmpty()) {
 			System.out.println("There are no users in the system.");
 		} else {
+			try {
 			System.out.println(controller.getUserList());
+			} catch (DALException e) {
+				// TODO: handle exception
+			}
 		}
 	}
 

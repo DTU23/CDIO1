@@ -16,7 +16,7 @@ public class PersistentUserDAO implements IDAL{
 		users = new DTOList<>();
 	}
 
-	public UserDTO getUser(int userId) throws DALException {
+	public UserDTO getUser(int userId) {
 		for (UserDTO user : users) {
 			if (user.getUserID() == userId) {
 				return user;
@@ -35,6 +35,7 @@ public class PersistentUserDAO implements IDAL{
 
 	public void createUser(UserDTO user) throws DALException {
 		users.add(user);
+
 		try {
 			storage.write(users);
 		}catch (IOException e){
@@ -45,6 +46,7 @@ public class PersistentUserDAO implements IDAL{
 	public void updateUser(UserDTO user) throws DALException {
 		deleteUser(user.getUserID());
 		createUser(user);
+
 		try {
 			storage.write(users);
 		}catch (IOException e){
@@ -58,6 +60,7 @@ public class PersistentUserDAO implements IDAL{
 				users.remove(users.get(i));
 			}
 		}
+
 		try {
 			storage.write(users);
 		}catch (IOException e){
@@ -77,9 +80,9 @@ public class PersistentUserDAO implements IDAL{
 	public void init() throws DALException {
 		try {
 			users = storage.read();
-		}catch (ClassNotFoundException e){
+		} catch (ClassNotFoundException e){
 			throw new DALException("ClassNotFoundException", e);
-		}catch (IOException e){
+		} catch (IOException e){
 			throw new DALException("IOException", e);
 		}
 	}

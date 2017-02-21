@@ -12,7 +12,7 @@ public class UserDAO implements IDAL{
 		users = new DTOList<>();
 	}
 
-	public UserDTO getUser(int userId) throws DALException {
+	public UserDTO getUser(int userId) {
 		for (UserDTO user : users) {
 			if (user.getUserID() == userId) {
 				return user;

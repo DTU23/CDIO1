@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import model.IDAL;
 import model.UserDTO;
-import model.storage.IDataStorage;
 
 /**
  * This controller class handles communication with the data-layer.

@@ -2,7 +2,9 @@ package model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import model.IDataStorage.DALException;
+
+import model.storage.IDataStorage;
+import model.storage.IDataStorage.DALException;
 
 public class PersistentUserDAO implements IDAL{
 
@@ -11,7 +13,7 @@ public class PersistentUserDAO implements IDAL{
 
 	public PersistentUserDAO(IDataStorage storage) {
 		this.storage = storage;
-		users = new DTOList<UserDTO>();
+		users = new DTOList<>();
 	}
 
 	public UserDTO getUser(int userId) throws DALException {
@@ -78,7 +80,7 @@ public class PersistentUserDAO implements IDAL{
 		}catch (ClassNotFoundException e){
 			throw new DALException("ClassNotFoundException", e);
 		}catch (IOException e){
-			throw new DALException("IOEcetion", e);
+			throw new DALException("IOException", e);
 		}
 	}
 }

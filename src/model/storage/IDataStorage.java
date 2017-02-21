@@ -1,4 +1,7 @@
-package model;
+package model.storage;
+
+import model.DTOList;
+import model.UserDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,11 +12,9 @@ import java.util.ArrayList;
 public interface IDataStorage {
     /**
      * Updates memory to persistent data. Returns false on error
-     * @param users
-     * @return boolean Error
+     * @param users array-list of userDTO objects
      */
-    boolean write(ArrayList<UserDTO> users) throws IOException;
-    //TODO lav noget exception throwing handling i stedet for boolean return
+    void write(ArrayList<UserDTO> users) throws IOException;
 
     /**
      * Reads data input to memory
@@ -21,7 +22,7 @@ public interface IDataStorage {
      */
     DTOList<UserDTO> read() throws IOException, ClassNotFoundException;
     
-  	public class DALException extends Exception {
+	class DALException extends Exception {
   		
   		private static final long serialVersionUID = 7355418246336739229L;
 

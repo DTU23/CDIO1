@@ -1,10 +1,12 @@
-package model;
+package model.storage;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import model.DTOList;
+import model.UserDTO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,8 +18,15 @@ public class JSONStorage implements IDataStorage {
     private String filePath;
 
     /**
+     * Constructor overload for dafault filepath
+     */
+    public JSONStorage() {
+        this(System.getProperty("user.dir")+"/src/model/storage/data.json");
+    }
+
+    /**
      * Constructor implements datapersistence by getting filepath passed.
-     * @param filePath
+     * @param filePath path to which the json file will be read/written
      */
     public JSONStorage(String filePath){
         this.filePath = filePath;
@@ -25,11 +34,11 @@ public class JSONStorage implements IDataStorage {
 
     /**
      * Method writes data to persistent json-file
-     * @param users
-     * @return boolean Error
+     * @param users arraylist of userDTO objects
      */
     @Override
-    public boolean write(ArrayList<UserDTO> users) {
+    @SuppressWarnings("unchecked")
+    public void write(ArrayList<UserDTO> users) throws IOException{
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JSONObject usersJSON = new JSONObject();
         JSONArray usersArray = new JSONArray();
@@ -42,23 +51,16 @@ public class JSONStorage implements IDataStorage {
             user.put("userName", users.get(i).getUserName());
             user.put("userID", users.get(i).getUserID());
             JSONArray roles = new JSONArray();
-            for (String role: users.get(i).getRoles()) {
-                roles.add(role);
-            }
+            roles.addAll(users.get(i).getRoles());
             user.put("roles", roles);
             usersArray.add(user);
         }
         usersJSON.put("users", usersArray);
 
-        // try-with-resources statement based on post comment below :)
-        try (FileWriter file = new FileWriter(this.filePath)) {
-            file.write(gson.toJson(usersJSON));
-            System.out.println("Successfully Copied JSON Object to File...");
-            System.out.println("\nJSON Object: \n" + gson.toJson(usersJSON));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return false;
+        FileWriter file = new FileWriter(this.filePath);
+        file.write(gson.toJson(usersJSON));
+        System.out.println("Successfully Copied JSON Object to File...");
+        System.out.println("\nJSON Object: \n" + gson.toJson(usersJSON));
     }
 
     /**
@@ -66,7 +68,8 @@ public class JSONStorage implements IDataStorage {
      * @return ArrayList<UserDTO>
      */
     @Override
-    public DTOList<UserDTO> read() {
+    @SuppressWarnings("unchecked")
+    public DTOList<UserDTO> read() throws IOException {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(this.filePath));
@@ -84,17 +87,14 @@ public class JSONStorage implements IDataStorage {
                 userDTO.setUserID((int)(long)jsonUser.get("userID"));
                 userDTO.setPassword(jsonUser.get("password").toString());
                 userDTO.setCpr(jsonUser.get("cpr").toString());
-
-                JSONObject jsonRolesObject = (JSONObject) jsonUser;
-                ArrayList<String> roles = new ArrayList<String>();
-                roles.addAll((ArrayList<String>) jsonRolesObject.get("roles"));
+                ArrayList<String> roles = new ArrayList<>();
+                roles.addAll((ArrayList<String>) jsonUser.get("roles"));
                 userDTO.setRoles(roles);
                 userList.add(userDTO);
             }
             return userList;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IOException("", e);
         }
-        return null;
     }
 }

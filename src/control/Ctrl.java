@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.IDAL;
-import model.IDataStorage;
+import model.storage.IDataStorage;
 import model.UserDTO;
 
 /**

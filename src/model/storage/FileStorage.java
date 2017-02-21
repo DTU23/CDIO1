@@ -1,4 +1,7 @@
-package model;
+package model.storage;
+
+import model.DTOList;
+import model.UserDTO;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -8,14 +11,15 @@ public class FileStorage implements IDataStorage {
     private String path;
 
     public FileStorage() {
-        this(System.getProperty("user.dir")+"/src/model/data.txt");
+        this(System.getProperty("user.dir")+"/src/model/storage/data.txt");
     }
+
     public FileStorage(String path) {
         this.path = path;
     }
 
     @Override
-    public boolean write(ArrayList<UserDTO> users) throws IOException {
+    public void write(ArrayList<UserDTO> users) throws IOException {
         FileOutputStream fOS = null;
         ObjectOutputStream oOS = null;
 
@@ -31,7 +35,6 @@ public class FileStorage implements IDataStorage {
         } finally {
             oOS.close();
         }
-        return true;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package main;
 import control.Ctrl;
 import model.*;
+import model.storage.FileStorage;
+import model.storage.IDataStorage;
 import view.TUI;
 
 public class Main{

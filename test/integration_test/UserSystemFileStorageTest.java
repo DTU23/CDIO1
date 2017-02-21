@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import control.Ctrl;
-import model.FileStorage;
-import model.IDataStorage;
+import model.storage.FileStorage;
+import model.storage.IDataStorage;
 import model.UserDAO;
 
 public class UserSystemFileStorageTest {

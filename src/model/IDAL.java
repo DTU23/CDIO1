@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-import model.IDataStorage.DALException;
+import model.storage.IDataStorage.DALException;
 
 public interface IDAL {
 

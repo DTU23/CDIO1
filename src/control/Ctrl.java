@@ -1,11 +1,9 @@
 package control;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.IDAL;
-import model.storage.IDataStorage;
 import model.UserDTO;
 
 /**
@@ -47,8 +45,8 @@ public class Ctrl {
 	/**
 	 * Creates new user
 	 * @param hashMap user-details organized in a hashmap
-	 * @throws IDataStorage.DALException exception from data-layer
-	 * @throws IDataStorage.DALException exception from userobject interactions
+	 * @throws IDAL.DALException exception from data-layer
+	 * @throws UserDTO.DTOException exception from userobject interactions
 	 */
 	public void createUser(HashMap<String, Object> hashMap) throws UserDTO.DTOException, IDAL.DALException {
 		this.dao.createUser(new UserDTO(hashMap));
@@ -57,7 +55,7 @@ public class Ctrl {
 	/**
 	 * Deletes a user from the data persistence
 	 * @param hashMap user-details organized in a hashmap
-	 * @throws IDataStorage.DALException exception from data-layer
+	 * @throws IDAL.DALException exception from data-layer
 	 */
 	public void deleteUser(HashMap<String, Object> hashMap) throws IDAL.DALException {
 		this.dao.deleteUser((int) hashMap.get("ID"));
@@ -66,7 +64,7 @@ public class Ctrl {
 	/**
 	 * Edits a user. Takes ID for user being edited and a hashmap for which key to update.
 	 * @param hashMap user-details organized in a hashmap
-	 * @throws IDataStorage.DALException exception raised at data-layer
+	 * @throws IDAL.DALException exception raised at data-layer
 	 */
 	@SuppressWarnings("unchecked")
 	public void editUser(HashMap<String, Object> hashMap) throws IDAL.DALException {
@@ -100,7 +98,7 @@ public class Ctrl {
 
 	/**
 	 * Initializes datapersistence/DAO.
-	 * @throws IDataStorage.DALException exception from data-layer
+	 * @throws IDAL.DALException exception from data-layer
 	 */
 	public void initStorage() throws IDAL.DALException {
 		this.dao.init();

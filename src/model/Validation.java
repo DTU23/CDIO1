@@ -25,7 +25,7 @@ public class Validation {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Method to validate if an ID is a valid choice.
 	 * @param ID
@@ -43,7 +43,7 @@ public class Validation {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Method to validate if a user name is a valid choice.
 	 * @param userName
@@ -57,7 +57,7 @@ public class Validation {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Method to validate if a set of initials is a valid choice.
 	 * @param initials
@@ -86,31 +86,30 @@ public class Validation {
 					int day = Integer.parseInt(cpr.substring(0, 2));
 					int year = Integer.parseInt(i + cpr.substring(4, 6));
 					// Creates a calendar object and sets year and month
-					Calendar mycal = new GregorianCalendar(year, month, 1);
+					Calendar cprDate = new GregorianCalendar(year, month-1, 1);
 					// Get the number of days in that month
-					int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+					int daysInMonth = cprDate.getActualMaximum(Calendar.DAY_OF_MONTH);
 					// Checks if day is valid
 					if (day > 0 && day <= daysInMonth) {
-						// check if full cpr is valid
-						int CprProductSum = 0;
-						int[] multiplyBy = {4, 3, 2, 7, 6, 5, 4, 3, 2, 1};
-						for (int j = 0; j < cpr.length(); j++) {
-							CprProductSum += Integer.parseInt(cpr.substring(j, j+1)) * multiplyBy[j];
-						}
-						if (CprProductSum % 11 == 0) {
-							return true;
-						} else {
-							return false;
+						// check if the date later than todays date
+						cprDate.set(year, month-1, day);
+						Calendar currentDate = new GregorianCalendar();
+						if (cprDate.compareTo(currentDate) <= 0) {
+							// check if full cpr is valid
+							int CprProductSum = 0;
+							int[] multiplyBy = {4, 3, 2, 7, 6, 5, 4, 3, 2, 1};
+							for (int j = 0; j < cpr.length(); j++) {
+								CprProductSum += Integer.parseInt(cpr.substring(j, j+1)) * multiplyBy[j];
+							}
+							if (CprProductSum % 11 == 0) {
+								return true;
+							}
 						}
 					}
 				}
-				return false;
-			} else {
-				return false;
 			}
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -128,7 +127,7 @@ public class Validation {
 		Matcher m = p.matcher(password);
 		return m.matches();
 	}
-	
+
 	/**
 	 * Method to validate if a role is a valid choice.
 	 * @param role

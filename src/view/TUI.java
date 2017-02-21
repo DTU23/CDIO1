@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import control.Ctrl;
 import model.IDAL.DALException;
+import model.UserDTO.DTOException;
 import model.Validation;
 
 public class TUI implements UI {
@@ -23,9 +24,9 @@ public class TUI implements UI {
 	public void run() {
 		try {
 			controller.initStorage();
-		} catch (Exception e) {
+		} catch (DALException e) {
 			e.printStackTrace();
-			//TODO håndtering?
+			System.out.println("Something went wrong when trying to load users from storage.");
 		}
 		mainMenu();
 		scanner.close();
@@ -101,22 +102,22 @@ public class TUI implements UI {
 				controller.createUser(hashMap);
 				// prints ID and generated password
 				System.out.println("Your ID is: " + hashMap.get("ID") + ", and your password is: " + password);
-			} catch (Exception e) {
+			} catch (DALException e) {
 				e.printStackTrace();
-				//TODO håndtering?
+				System.out.println("Something went wrong, user might have been saved in storage.");
+			} catch (DTOException e) {
+				e.printStackTrace();
+				System.out.println("Something went wrong, user wasn't created.");
 			}
 		}
 	}
 
 	private void listUsers() {
-		if(controller.isUserListEmpty()) {
-			System.out.println("There are no users in the system.");
-		} else {
-			try {
+		try {
 			System.out.println(controller.getUserList());
-			} catch (DALException e) {
-				// TODO: handle exception
-			}
+		} catch (DALException e) {
+			e.printStackTrace();
+			System.out.println("There are no users in the system.");
 		}
 	}
 
@@ -169,7 +170,7 @@ public class TUI implements UI {
 				controller.editUser(hashMap);
 			} catch (Exception e) {
 				e.printStackTrace();
-				//TODO håndtering?
+				System.out.println("Something went wrong, changes might have been saved in storage.");
 			}
 			}
 		} else {
@@ -202,7 +203,7 @@ public class TUI implements UI {
 					controller.deleteUser(hashMap);
 				} catch (Exception e) {
 					e.printStackTrace();
-					//TODO håndtering?
+					System.out.println("Something went wrong, user might have been deleted from storage.");
 				}
 			}
 		} else {

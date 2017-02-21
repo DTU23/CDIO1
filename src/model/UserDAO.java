@@ -10,7 +10,7 @@ public class UserDAO implements IDAL{
 		users = new DTOList<>();
 	}
 
-	public UserDTO getUser(int userId) {
+	public UserDTO getUser(int userId){
 		for (UserDTO user : users) {
 			if (user.getUserID() == userId) {
 				return user;
@@ -20,7 +20,11 @@ public class UserDAO implements IDAL{
 	}
 
 	public ArrayList<UserDTO> getUserList() throws DALException {
-		return users;
+		if(users == null){
+			throw new DALException("Userlist not instantiated!");
+		}else {
+			return users;
+		}
 	}
 
 	public boolean isUserListEmpty(){

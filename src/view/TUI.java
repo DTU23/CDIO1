@@ -216,7 +216,7 @@ public class TUI implements UI {
 	 * @param length how many characters should the password be
 	 * @return String
 	 */
-	private String generatePassword(int length){
+	public static String generatePassword(int length){
 		String charactersCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String characters = "abcdefghijklmnopqrstuvwxyz";
 		String numbers = "0123456789";

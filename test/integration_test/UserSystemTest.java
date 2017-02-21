@@ -1,27 +1,25 @@
 package integration_test;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.IDAL;
-import model.PersistentUserDAO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import control.Ctrl;
+import model.IDAL;
+import model.PersistentUserDAO;
+import model.Validation;
 import model.storage.FileStorage;
 import model.storage.IDataStorage;
 import view.TUI;
-import model.UserDAO;
-import model.Validation;
 
 public class UserSystemTest {
 
-	Ctrl controller;
-	private String password;
+	private Ctrl controller;
 
 	@Before
 	public void setUp() throws Exception {
@@ -36,6 +34,9 @@ public class UserSystemTest {
 		controller = null;
 	}
 
+	/**
+	 * Tests if the object gets created by calling the createUser method in the controller.
+	 */
 	@Test
 	public void createUserTest() {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -43,7 +44,8 @@ public class UserSystemTest {
 		String userName = "Peter Madsen";
 		String initials = "PM";
 		String cpr = "1402011234";
-		String[] roles = {"operator", "admin"};
+		String password;
+		ArrayList<String> roles = new ArrayList<>(); roles.add("operator"); roles.add("admin");
 		String output = null;
 		//clean up
 		hashMap.put("ID", 99);
@@ -67,7 +69,7 @@ public class UserSystemTest {
 			password = TUI.generatePassword(10);
 		} while(!Validation.isValidPassword(password));
 		hashMap.put("password", password);
-		if(Validation.isValidRole(roles[0]) && Validation.isValidRole(roles[1])) {
+		if(Validation.isValidRole(roles.get(0)) && Validation.isValidRole(roles.get(1))) {
 			hashMap.put("roles", roles);
 		}
 		try {
@@ -76,18 +78,26 @@ public class UserSystemTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		assertTrue(output.contains("userID = 99, password = " + password + ", userName = Peter Madsen, ini = PM, cpr = 1402011234, roles = [operator, admin]"));
+		assertTrue(output, output.contains("userID = 99, password = " + password + ", userName = Peter Madsen, ini = PM, cpr = 1402011234, roles = [operator, admin]"));
 	}
 
+	/**
+	 * Tests if the previously created user is still in system after relaunching the system.
+	 */
 	@Test
 	public void persistentDataTest() {
 		String output = null;
 		try {
 			output = controller.getUserList().toString();
-		} catch (Exception e) {}
-		assertTrue(output.contains("userID = 99, password = " + password + ", userName = Peter Madsen, ini = PM, cpr = 1402011234, roles = [operator, admin]"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertTrue(output, output.contains("userID = 99, password = ") && output.contains(", userName = Peter Madsen, ini = PM, cpr = 1402011234, roles = [operator, admin]"));
 	}
 
+	/**
+	 * Tests if the user name can be edited.
+	 */
 	@Test
 	public void editUserNameTest() {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -103,29 +113,39 @@ public class UserSystemTest {
 		try {
 			controller.editUser(hashMap);
 			output = controller.getUserList().toString();
-		} catch (Exception e) {}
-		assertTrue(output.contains("userID = 99, password = " + password + ", userName = Peter Jensen, ini = PM, cpr = 1402011234, roles = [operator, admin]"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertTrue(output, output.contains("userID = 99, password = ") && output.contains(", userName = Peter Jensen, ini = PM, cpr = 1402011234, roles = [operator, admin]"));
 	}
 
+	/**
+	 * Tests if the roles can be edited.
+	 */
 	@Test
 	public void editRolesTest() {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String ID = "99";
-		String[] roles = {"pharmacist", "foreman"};
+		ArrayList<String> roles = new ArrayList<>(); roles.add("pharmacist"); roles.add("foreman");
 		String output = null;
 		hashMap.put("ID", Integer.parseInt(ID));
 		if(controller.exists(hashMap)) {
-			if(Validation.isValidRole(roles[0]) && Validation.isValidRole(roles[1])) {
+			if(Validation.isValidRole(roles.get(0)) && Validation.isValidRole(roles.get(1))) {
 				hashMap.put("roles", roles);
 			}
 		}
 		try {
 			controller.editUser(hashMap);
 			output = controller.getUserList().toString();
-		} catch (Exception e) {}
-		assertTrue(output.contains("userID = 99, password = " + password + ", userName = Peter Jensen, ini = PM, cpr = 1402011234, roles = [pharmacist, foreman]"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertTrue(output, output.contains("userID = 99, password = ") && output.contains(", userName = Peter Jensen, ini = PM, cpr = 1402011234, roles = [pharmacist, foreman]"));
 	}
 
+	/**
+	 * Tests if the user can be deleted from the system.
+	 */
 	@Test
 	public void deleteUserTest() {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -135,12 +155,14 @@ public class UserSystemTest {
 		// deletes user
 		try {
 			controller.deleteUser(hashMap);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// check if its in the user list
 		try {
 			output = controller.getUserList().toString();
 		} catch (Exception e) {}
-		assertTrue(!output.contains("userID = 99, password = " + password + ", userName = Peter Jensen, ini = PM, cpr = 1402011234, roles = [pharmacist, foreman]")
+		assertTrue(output, !output.contains("userID = 99, password = ") && output.contains(", userName = Peter Jensen, ini = PM, cpr = 1402011234, roles = [pharmacist, foreman]")
 				&& !output.equals(null));
 	}
 }

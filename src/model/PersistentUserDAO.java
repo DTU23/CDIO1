@@ -25,7 +25,11 @@ public class PersistentUserDAO implements IDAL{
 	}
 
 	public ArrayList<UserDTO> getUserList() throws DALException {
-		return users;
+		if (users == null) {
+			throw new DALException("Userlist not instantiated");
+		} else {
+			return users;
+		}
 	}
 	
 	public boolean isUserListEmpty(){

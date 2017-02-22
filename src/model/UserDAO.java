@@ -32,7 +32,11 @@ public class UserDAO implements IDAL{
 	}
 
 	public void createUser(UserDTO user) throws DALException {
-		users.add(user);
+		if(users.add(user)){
+
+		} else {
+			throw new DALException("User couldn't be created");
+		}
 	}
 
 	public void updateUser(UserDTO user) throws DALException {
@@ -43,7 +47,11 @@ public class UserDAO implements IDAL{
 	public void deleteUser(int userId) throws DALException {
 		for (int i = 0; i < users.size(); i++) {
 			if (users.get(i).getUserID() == userId) {
-				users.remove(users.get(i));
+				if(users.remove(users.get(i))) {
+
+				} else {
+					throw new DALException("User couldn't be removed");
+				}
 			}
 		}
 	}
@@ -57,5 +65,7 @@ public class UserDAO implements IDAL{
 		return false;
 	}
 	
-	public void init() throws DALException {}
+	public void init() throws DALException {
+
+	}
 }

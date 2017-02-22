@@ -84,7 +84,7 @@ public class Validation {
 			if (month > 0 && month < 13) {
 				for (int i = 1900; i < 2100; i += 100) {
 					int day = Integer.parseInt(cpr.substring(0, 2));
-					int year = Integer.parseInt(i + cpr.substring(4, 6));
+					int year = i + Integer.parseInt(cpr.substring(4, 6));
 					// Creates a calendar object and sets year and month
 					Calendar cprDate = new GregorianCalendar(year, month-1, 1);
 					// Get the number of days in that month

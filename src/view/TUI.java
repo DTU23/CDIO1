@@ -154,7 +154,7 @@ public class TUI implements UI {
 							getPassword("", hashMap);
 							//TODO der skal laves en besked her hvis bruger skal vælge nyt kodeord
 							break loop;
-						case "role":
+						case "roles":
 							// TODO evt. to forskellige flows her, en der tilføjer og en der fjerner
 							getRoles("Choose roles from admin, pharmacist, foreman or operator, type done to finish adding roles " +
 									"or type cancel to go to main menu. You must add at least one role.", hashMap);

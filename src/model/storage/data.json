@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "cpr": "1234567890",
+      "password": "",
+      "ini": "xz",
+      "roles": [
+        "Admin",
+        "Pharmacist",
+        "Foreman",
+        "Operator"
+      ],
+      "userName": "Admin",
+      "userID": 1
+    }
+  ]
+}
